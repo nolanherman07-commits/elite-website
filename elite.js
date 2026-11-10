@@ -204,3 +204,19 @@ document.addEventListener("DOMContentLoaded", () => {
     location.href = `mailto:${LEAD_EMAIL}?subject=${encodeURIComponent(f.dataset.subject)}&body=${encodeURIComponent(body)}`;
   }));
 });
+
+/* Mobile menu */
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.querySelector(".menu-btn"), menu = document.getElementById("mobile-menu");
+  if (!btn || !menu) return;
+  const set = (open) => {
+    document.body.classList.toggle("menu-open", open);
+    btn.setAttribute("aria-expanded", open); btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menu.setAttribute("aria-hidden", !open);
+    btn.querySelector(".menu-word").textContent = open ? "Close" : "Menu";
+  };
+  btn.addEventListener("click", () => set(!document.body.classList.contains("menu-open")));
+  menu.addEventListener("click", (e) => { if (e.target.closest("a")) set(false); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
+  addEventListener("pageshow", () => set(false));
+});
