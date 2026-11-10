@@ -51,40 +51,48 @@ function mountainSVG(name, seed = 7) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".scene").forEach((el, i) => (el.innerHTML = mountainSVG(el.dataset.scene, 11 + i * 17)));
+  const $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
+  $$(".scene").forEach((el, i) => (el.innerHTML = mountainSVG(el.dataset.scene, 11 + i * 17)));
 
   // Optional hero video
-  const v = document.querySelector(".hero-video");
+  const v = $(".hero-video");
   if (HERO_VIDEO && v) { v.src = HERO_VIDEO; v.hidden = false; v.play().catch(() => {}); }
 
-  // Headline: words slide up one by one
-  document.querySelectorAll(".split-words").forEach((h) => {
-    const parts = h.innerHTML.split(/(<em>.*?<\/em>|\s+)/).filter((s) => s && s.trim());
-    h.innerHTML = parts.map((p, i) => `<span class="w"><span style="animation-delay:${1.5 + i * .14}s">${p}</span></span>`).join(" ");
+  // Headlines: words slide up one by one
+  const isHome = !!$(".curtain");
+  $$(".split-words").forEach((h) => {
+    const parts = h.innerHTML.split(/(<em>.*?<\/em>|\s+)/).filter((p) => p && p.trim());
+    const start = isHome ? 1.5 : 0.3;
+    h.innerHTML = parts.map((p, i) => `<span class="w"><span style="animation-delay:${start + i * 0.14}s">${p}</span></span>`).join(" ");
   });
-  // Staggered fade-ins in the hero
-  [".hero-copy .kicker", ".hero-sub", ".hero-btns", ".trace-line", ".hero-stats", ".glass-card"].forEach((s, i) => {
-    const el = document.querySelector(s); if (el) el.style.animationDelay = `${1.4 + i * .18}s`;
+  [".hero-copy .kicker", ".hero-sub", ".hero-btns", ".trace-line", ".hero-stats", ".glass-card"].forEach((q, i) => {
+    const el = $(q);
+    if (el) el.style.animationDelay = `${1.4 + i * 0.18}s`;
   });
 
-  // Statement: words light up as you scroll
-  const words = document.querySelector(".words");
-  if (words) {
-    words.innerHTML = words.innerHTML.split(/(<em>.*?<\/em>|\s+)/).filter((s) => s && s.trim()).map((w) => `<span class="wd">${w}</span>`).join(" ");
-    const spans = words.querySelectorAll(".wd");
+  // Words light up as you scroll
+  $$(".words").forEach((words) => {
+    words.innerHTML = words.innerHTML.split(/(<em>.*?<\/em>|\s+)/).filter((w) => w && w.trim()).map((w) => `<span class="wd">${w}</span>`).join(" ");
+    const spans = $$(".wd", words);
     const lightUp = () => {
       const r = words.getBoundingClientRect(), vh = innerHeight;
-      const prog = Math.min(1, Math.max(0, (vh * .85 - r.top) / (r.height + vh * .35)));
-      spans.forEach((s, i) => s.classList.toggle("lit", i / spans.length < prog));
+      const prog = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      spans.forEach((sp, i) => sp.classList.toggle("lit", i / spans.length < prog));
     };
-    addEventListener("scroll", lightUp, { passive: true }); lightUp();
-  }
+    addEventListener("scroll", lightUp, { passive: true });
+    lightUp();
+  });
 
   // Count-up numbers
   const countUp = (el) => {
+    if (el.dataset.done) return;
+    el.dataset.done = 1;
     const end = +el.dataset.count, pre = el.dataset.prefix || "", suf = el.dataset.suffix || "", t0 = performance.now();
-    const step = (t) => { const p = Math.min(1, (t - t0) / 1800), e = 1 - Math.pow(1 - p, 3);
-      el.textContent = pre + Math.round(end * e) + suf; if (p < 1) requestAnimationFrame(step); };
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / 1800), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + Math.round(end * e) + suf;
+      if (p < 1) requestAnimationFrame(step);
+    };
     requestAnimationFrame(step);
   };
 
@@ -92,60 +100,106 @@ document.addEventListener("DOMContentLoaded", () => {
   const io = new IntersectionObserver((es) => es.forEach((e) => {
     if (!e.isIntersecting) return;
     e.target.classList.add("in");
-    e.target.querySelectorAll("[data-count]").forEach(countUp);
+    $$("[data-count]", e.target).forEach(countUp);
     io.unobserve(e.target);
-  }), { threshold: .2 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-  setTimeout(() => document.querySelectorAll(".hero-stats [data-count]").forEach(countUp), 2200);
+  }), { threshold: 0.15 });
+  $$(".reveal").forEach((el) => io.observe(el));
+  setTimeout(() => $$(".hero-stats [data-count]").forEach(countUp), 2200);
 
-  // Listings rail: arrows + progress bar
-  const rail = document.querySelector(".rail"), bar = document.querySelector(".progress span");
-  if (rail) {
-    const card = () => rail.querySelector(".home-card").offsetWidth + 24;
-    document.querySelector(".arr.next").onclick = () => rail.scrollBy({ left: card() });
-    document.querySelector(".arr.prev").onclick = () => rail.scrollBy({ left: -card() });
-    const upd = () => { const max = rail.scrollWidth - rail.clientWidth; bar.style.width = `${25 + 75 * (max ? rail.scrollLeft / max : 0)}%`; };
-    rail.addEventListener("scroll", upd, { passive: true }); upd();
-    // gentle auto-glide so the rail feels alive
-    let auto = setInterval(() => { if (rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 4) rail.scrollTo({ left: 0 }); else rail.scrollBy({ left: card() }); }, 4500);
-    ["pointerdown", "wheel", "touchstart"].forEach((ev) => rail.addEventListener(ev, () => clearInterval(auto), { once: true, passive: true }));
-  }
+  // Listing rails: arrows, progress bar, gentle auto-glide
+  $$(".listings").forEach((sec) => {
+    const rail = $(".rail", sec), bar = $(".progress span", sec);
+    if (!rail) return;
+    const card = () => (($(".home-card", rail) || {}).offsetWidth || 400) + 24;
+    const next = $(".arr.next", sec), prev = $(".arr.prev", sec);
+    if (next) next.addEventListener("click", () => rail.scrollBy({ left: card() }));
+    if (prev) prev.addEventListener("click", () => rail.scrollBy({ left: -card() }));
+    const upd = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      if (bar) bar.style.width = `${25 + 75 * (max ? rail.scrollLeft / max : 0)}%`;
+    };
+    rail.addEventListener("scroll", upd, { passive: true });
+    upd();
+    if (rail.scrollWidth > rail.clientWidth + 10) {
+      const auto = setInterval(() => {
+        if (rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 4) rail.scrollTo({ left: 0 });
+        else rail.scrollBy({ left: card() });
+      }, 4500);
+      ["pointerdown", "wheel", "touchstart"].forEach((ev) => rail.addEventListener(ev, () => clearInterval(auto), { once: true, passive: true }));
+    }
+  });
 
-  // Area panels expand on hover / tap
-  const panels = document.querySelectorAll(".panel");
-  panels.forEach((p) => ["mouseenter", "click"].forEach((ev) => p.addEventListener(ev, () => panels.forEach((q) => q.classList.toggle("open", q === p)))));
+  // Area panels: expand on hover; tap an open panel to visit that area
+  $$(".panels").forEach((group) => {
+    const ps = $$(".panel", group);
+    ps.forEach((p) => {
+      p.addEventListener("mouseenter", () => ps.forEach((q) => q.classList.toggle("open", q === p)));
+      p.addEventListener("click", (e) => {
+        if (e.target.closest("a")) return;
+        if (p.classList.contains("open") && p.dataset.href) location.href = p.dataset.href;
+        else ps.forEach((q) => q.classList.toggle("open", q === p));
+      });
+    });
+  });
 
   // Reviews rotate
-  const qs = document.querySelectorAll(".q"), bars = document.querySelectorAll(".q-bars i");
-  let qi = 0;
-  setInterval(() => {
-    qs[qi].classList.remove("on"); bars[qi].classList.remove("on");
-    qi = (qi + 1) % qs.length;
-    qs[qi].classList.add("on"); void bars[qi].offsetWidth; bars[qi].classList.add("on");
-  }, 7000);
+  const qs = $$(".q"), bars = $$(".q-bars i");
+  if (qs.length > 1) {
+    let qi = 0;
+    setInterval(() => {
+      qs[qi].classList.remove("on");
+      if (bars[qi]) bars[qi].classList.remove("on");
+      qi = (qi + 1) % qs.length;
+      qs[qi].classList.add("on");
+      if (bars[qi]) { void bars[qi].offsetWidth; bars[qi].classList.add("on"); }
+    }, 7000);
+  }
+
+  // Mortgage calculator
+  if ($("#c-price")) {
+    const money = (n) => "$" + Math.round(n).toLocaleString("en-US");
+    const calc = () => {
+      const price = +$("#c-price").value || 0, down = (+$("#c-down").value || 0) / 100;
+      const r = (+$("#c-rate").value || 0) / 100 / 12, n = (+$("#c-term").value || 30) * 12, extra = +$("#c-extra").value || 0;
+      const loan = price * (1 - down), pi = r ? loan * r / (1 - Math.pow(1 + r, -n)) : loan / n;
+      $("#c-pay").textContent = money(pi + extra);
+      $("#c-pi").textContent = money(pi);
+      $("#c-ti").textContent = money(extra);
+      $("#c-loan").textContent = money(loan);
+    };
+    $$(".calc input").forEach((el) => el.addEventListener("input", calc));
+    calc();
+  }
 
   // Nav darkens after scrolling; cursor glow follows the mouse
-  const nav = document.querySelector(".nav-wrap"), glow = document.querySelector(".cursor-glow");
-  addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 80), { passive: true });
-  addEventListener("pointermove", (e) => { glow.style.left = e.clientX + "px"; glow.style.top = e.clientY + "px"; }, { passive: true });
+  const nav = $(".nav-wrap"), glow = $(".cursor-glow");
+  addEventListener("scroll", () => { if (nav) nav.classList.toggle("scrolled", scrollY > 80); }, { passive: true });
+  if (glow) addEventListener("pointermove", (e) => { glow.style.left = e.clientX + "px"; glow.style.top = e.clientY + "px"; }, { passive: true });
 
-  // Hero parallax: copy drifts as you scroll
-  const copy = document.querySelector(".hero-copy");
-  addEventListener("scroll", () => { if (scrollY < innerHeight) copy.style.transform = `translateY(${scrollY * .25}px)`; }, { passive: true });
+  // Cover text drifts as you scroll
+  const copy = $(".hero-copy") || $(".ph-copy");
+  if (copy) addEventListener("scroll", () => { if (scrollY < innerHeight) copy.style.transform = `translateY(${scrollY * 0.25}px)`; }, { passive: true });
 
   // Lead forms
-  document.querySelectorAll(".lead-form").forEach((f) => f.addEventListener("submit", async (e) => {
+  $$(".lead-form").forEach((f) => f.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const data = new FormData(f), btn = f.querySelector("button");
-    const showGuide = () => { if (f.dataset.guide && !f.parentElement.querySelector(".guide-dl"))
-      f.insertAdjacentHTML("afterend", `<a class="pill light guide-dl" style="margin-top:1.2rem" href="${f.dataset.guide}" download>Download your guide</a>`); };
+    const data = new FormData(f), btn = $("button", f);
+    const showGuide = () => {
+      if (f.dataset.guide && !f.parentElement.querySelector(".guide-dl"))
+        f.insertAdjacentHTML("afterend", `<a class="pill light guide-dl" style="margin-top:1.2rem" href="${f.dataset.guide}" download>Download your guide</a>`);
+    };
     if (FORM_ENDPOINT) {
       btn.textContent = "Sending...";
-      try { data.append("_subject", f.dataset.subject); const r = await fetch(FORM_ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } });
-        if (!r.ok) throw 0; f.reset(); btn.textContent = "Sent!"; showGuide(); } catch { btn.textContent = "Try again"; }
+      try {
+        data.append("_subject", f.dataset.subject);
+        const r = await fetch(FORM_ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } });
+        if (!r.ok) throw new Error();
+        f.reset(); btn.textContent = "Sent!"; showGuide();
+      } catch (err) { btn.textContent = "Try again"; }
       return;
     }
     showGuide();
-    location.href = `mailto:${LEAD_EMAIL}?subject=${encodeURIComponent(f.dataset.subject)}&body=${encodeURIComponent([...data].map(([k, v]) => `${k}: ${v}`).join("\n"))}`;
+    const body = [...data].map(([k, val]) => `${k}: ${val}`).join("\n");
+    location.href = `mailto:${LEAD_EMAIL}?subject=${encodeURIComponent(f.dataset.subject)}&body=${encodeURIComponent(body)}`;
   }));
 });
