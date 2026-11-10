@@ -61,14 +61,8 @@ def header(active):
     return f'''<header class="nav-wrap">
   <nav class="nav-pill"><a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Nestlewood Realty" /></a>{links}</nav>
   <a href="contact.html" class="nav-cta">Let's talk</a>
-  <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span class="menu-word">Menu</span></button>
-</header>
-<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-  <nav class="mm-links">{mlinks}</nav>
-  <p class="mm-label">Areas</p>
-  <div class="mm-areas">{areas}</div>
-  <div class="mm-contact"><a class="pill solid" href="tel:{TEL}">Call {PHONE}</a><a class="pill" href="sms:{TEL}">Text Nolan</a></div>
-</div>'''
+  <nav class="tabbar" aria-label="Pages">{"".join(f'<a href="{h}"{" class=\"active\"" if (h == active or (h == "index.html" and not active)) else ""}>{t}</a>' for h, t in [("index.html", "Home")] + NAV)}</nav>
+</header>'''
 
 FOOTER = f'''<footer class="foot">
   <div class="wrap foot-grid">
