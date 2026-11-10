@@ -51,7 +51,7 @@ AREAS = {
     love=["Uptown dining, sports and nightlife", "Job opportunities across the region", "Neighborhoods from urban to suburban", "Close to Lake Norman and the foothills"]),
 }
 
-NAV = [("about.html", "About"), ("buy.html", "Buy"), ("sell.html", "Sell"), ("listings.html", "Listings"), ("areas.html", "Areas")]
+NAV = [("about.html", "About"), ("buy.html", "Buy"), ("sell.html", "Sell"), ("listings.html", "Listings")]
 
 def header(active):
     links = "".join(f'<a href="{h}"{" class=\"active\"" if h == active else ""}>{t}</a>' for h, t in NAV)
@@ -74,7 +74,7 @@ FOOTER = f'''<footer class="foot">
   <div class="wrap foot-grid">
     <a href="index.html"><img src="images/logo.png" alt="Nestlewood Realty" /></a>
     <p>Nolan Herman, REALTOR® · Nestlewood Realty<br />{ADDRESS}</p>
-    <div class="soc"><a href="about.html">About</a><a href="buy.html">Buy</a><a href="sell.html">Sell</a><a href="listings.html">Listings</a><a href="areas.html">Areas</a><a href="contact.html">Contact</a></div>
+    <div class="soc"><a href="about.html">About</a><a href="buy.html">Buy</a><a href="sell.html">Sell</a><a href="listings.html">Listings</a><a href="contact.html">Contact</a></div>
     <div class="soc"><a href="{INSTAGRAM}" {EXT}>Instagram</a><a href="{FACEBOOK}" {EXT}>Facebook</a><a href="{ZILLOW}" {EXT}>Zillow</a><a href="{HOMES}" {EXT}>Homes.com</a></div>
   </div>
   <div class="wrap fine">© 2026 Nestlewood Realty · Equal Housing Opportunity · REALTOR®</div>
@@ -129,10 +129,10 @@ def rail(items, title_html, eyebrow, link=None):
   <div class="wrap"><div class="progress"><span></span></div></div>
 </section>'''
 
-def panels(keys, title_html="Find your place in the <em>foothills</em>"):
+def panels(keys, title_html="From the foothills to <em>Charlotte</em>"):
     out = "".join(f'''<article class="panel{" open" if n == 0 else ""}" data-href="{k}.html">{bg(AREAS[k]["scene"], AREAS[k].get("photo"))}<div class="p-shade"></div>
   <div class="p-copy"><span class="num">0{n+1}</span><h3>{AREAS[k]["name"]}</h3><p>{AREAS[k]["short"]}</p><a class="pill light sm" href="{k}.html">Explore {AREAS[k]["name"]}</a></div></article>''' for n, k in enumerate(keys))
-    return f'''<section class="areas"><div class="wrap head"><div><p class="eyebrow">Explore the area</p><h2>{title_html}</h2></div><a class="under" href="areas.html">All areas →</a></div>
+    return f'''<section class="areas"><div class="wrap head"><div><p class="eyebrow">Explore the area</p><h2>{title_html}</h2></div></div>
   <div class="wrap panels">{out}</div></section>'''
 
 REVIEWS = '''<section class="reviews">
@@ -221,8 +221,8 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
     </div>
   </div>
 </section>
-{rail(FEATURED + SOLD, "Homes I'm <em>proud</em> to represent", "Featured &amp; sold", "listings.html")}
 {panels(list(AREAS))}
+{rail(FEATURED + SOLD, "Homes I'm <em>proud</em> to represent", "Featured &amp; sold", "listings.html")}
 {REVIEWS}
 {TOOLS}
 {CTA}''', curtain=True)
@@ -335,13 +335,7 @@ page("listings.html", "Listings | Nolan Herman, REALTOR®", "listings.html", f''
 {TOOLS}
 {CTA}''')
 
-# ================= AREAS =================
-page("areas.html", "Areas I Serve | Nolan Herman, REALTOR®", "areas.html", f'''
-{page_hero("Areas", "Find your <em>place.</em>", "Local guides to help you find the right town, the right neighborhood, and the right home.", "mist", video="lake")}
-{panels(list(AREAS), "From the foothills to <em>Charlotte</em>")}
-<section class="sec tight"><div class="wrap center"><p class="lead">Also serving Newton, Lenoir, Hudson, Sherrills Ford, Boone and the surrounding area.</p></div></section>
-{CTA}''')
-
+# Area pages (no separate Areas overview page)
 for key, a in AREAS.items():
     others = [k for k in AREAS if k != key]
     page(f"{key}.html", f"Living in {a['name']}, NC | Nolan Herman, REALTOR®", "areas.html", f'''
