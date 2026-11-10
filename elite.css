@@ -320,3 +320,9 @@ em { font-style: italic; color: var(--accent); }
 /* Real photo backgrounds (slow zoom) */
 .photo-bg { position: absolute; inset: 0; background-size: cover; background-position: center; animation: kenburns 22s ease-in-out infinite alternate; }
 .panel .photo-bg { animation-duration: 16s; }
+
+/* Phone layout fixes */
+@media (max-width: 900px) {
+  .nav-wrap { justify-content: flex-start; padding-left: 4%; }
+  .trace-line { display: none; }
+}
