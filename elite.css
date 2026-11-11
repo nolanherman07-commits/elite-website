@@ -430,3 +430,9 @@ em { font-style: italic; color: var(--accent); }
 .res-card h3 { font-size: 2.2rem; margin-bottom: .5rem; }
 .res-card p:not(.eyebrow) { color: var(--muted); font-size: .92rem; margin: 0 0 1.2rem; }
 @media (max-width: 900px) { .res-grid { grid-template-columns: 1fr; } .res-card { grid-template-columns: 110px 1fr; gap: 1rem; } .res-card h3 { font-size: 1.7rem; } }
+
+/* faster, tighter review strip */
+.qs { transition: opacity .55s ease, transform .55s ease; }
+.qs-stage { min-height: 6.5rem; }
+.quote-strip { padding: 3.6rem 0; }
+@media (max-width: 900px) { .qs-stage { min-height: 9rem; } }

@@ -158,21 +158,30 @@ SELL_TOOLS = f'''<section class="tools" id="value">
 </section>'''
 
 QUOTES = [
-  ("He even caught a mistake during closing that ended up giving us more money than we had anticipated.", "John F.", "Bought &amp; sold in Vale"),
-  ("We have bought &amp; sold several houses over the last 30+ years, and Nolan was our best realtor!", "Diane S.", "Home buyer"),
-  ("Relocating from the place where we raised our family was anticipated to be challenging, but Nolan significantly eased the process.", "Pricilla &amp; Jeff L.", "Bought in Granite Falls"),
+  ("He even caught a mistake during closing that got us more money.", "John F.", "Bought &amp; sold in Vale"),
+  ("I would highly recommend this young man.", "John F.", "Bought &amp; sold in Vale"),
+  ("Nolan was our best realtor! He made the buying process enjoyable.", "Diane S.", "Home buyer"),
+  ("Very knowledgeable, responsive, patient, personable, always ready to help.", "Diane S.", "Home buyer"),
+  ("Nolan significantly eased the process.", "Pricilla &amp; Jeff L.", "Bought in Granite Falls"),
   ("We couldn't have asked for a better realtor than Nolan.", "Alfred &amp; Rashonda W.", "First-time buyers in Newton"),
-  ("He looked out for our best interests, getting us a fantastic deal. You feel like you're their only client.", "Lorena &amp; Martin", "Home buyers"),
-  ("Nolan was always proactive, responsive, and genuinely committed to protecting my best interests.", "Jacopo B.", "Home buyer"),
-  ("He responds quickly to messages and questions and was on top of all the paperwork.", "Kalen &amp; Micheal M.", "Home buyers"),
+  ("He was always quick to answer our questions, incredibly patient.", "Alfred &amp; Rashonda W.", "First-time buyers in Newton"),
+  ("You feel like you're their only client.", "Lorena &amp; Martin", "Home buyers"),
+  ("He looked out for our best interests, getting us a fantastic deal.", "Lorena &amp; Martin", "Home buyers"),
+  ("He is exceptional at what he does.", "Jacopo B.", "Home buyer"),
+  ("Always proactive, responsive, and genuinely committed to my best interests.", "Jacopo B.", "Home buyer"),
+  ("He responds quickly and was on top of all the paperwork.", "Kalen &amp; Micheal M.", "Home buyers"),
+  ("Nolan was courteous, respectful and responsive.", "Darlene P.", "Home buyer"),
+  ("Truly a pleasure to work with Nolan.", "Darlene P.", "Home buyer"),
+  ("He went above and beyond with all of the little things.", "Mindy D.", "Home buyer"),
+  ("I could not have had a better agent.", "David J.", "Home buyer"),
+  ("Nolan was there every step of the way to boost me over every hurdle.", "David J.", "Home buyer"),
+  ("He made a stressful time easy, efficient, and quick.", "Ashley &amp; Bill", "Home buyers"),
   ("Nolan did a great job with a seller who wasn't motivated to negotiate.", "Dwayne W.", "Home buyer"),
-  ("When he said he would do something, he did it in a good and timely way.", "Darlene P.", "Home buyer"),
-  ("He went above and beyond with all of the little things that needed taken care of.", "Mindy D.", "Home buyer"),
-  ("I could not have had a better agent. Nolan was there every step of the way.", "David J.", "Home buyer"),
-  ("His professionalism and energy made what could have been a very stressful time easy, efficient, and quick.", "Ashley &amp; Bill", "Home buyers"),
 ]
 QUOTE_STRIP = '<section class="quote-strip" aria-label="Client reviews"><div class="wrap qs-inner"><div class="qs-stars">★★★★★ <span>5.0 on Zillow</span></div><div class="qs-stage">' + "".join(
     f'<blockquote class="qs"><p>“{q}”</p><cite>{n} · {w}</cite></blockquote>' for q, n, w in QUOTES) + '</div></div></section>'
+
+REVIEWS = QUOTE_STRIP  # every page uses the fast one-line strip
 
 RESUMES = '''<section class="sec resumes"><div class="wrap">
   <div class="head"><div><p class="eyebrow">Résumé</p><h2>See why clients <em>choose Nolan</em></h2></div></div>
@@ -254,9 +263,9 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
   </div>
 </section>
 {QUOTE_STRIP}
+{RESUMES}
 {panels(list(AREAS))}
 {TOOLS}
-{REVIEWS}
 {rail(FEATURED + SOLD, "Homes I'm <em>proud</em> to represent", "Featured &amp; sold", "listings.html")}
 {CTA}''', curtain=True)
 

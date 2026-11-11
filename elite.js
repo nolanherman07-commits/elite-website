@@ -147,18 +147,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // One-line reviews: shuffled, never repeats until every line has been shown
-  const qs2 = $$(".quote-strip .qs");
-  if (qs2.length) {
+  // One-line reviews: fast, shuffled, never repeats until every line has been shown
+  $$(".quote-strip").forEach((strip) => {
+    const items = $$(".qs", strip);
+    if (!items.length) return;
     let bag = [], cur = -1;
     const next = () => {
-      if (!bag.length) { bag = qs2.map((_, i) => i).sort(() => Math.random() - .5); if (bag[0] === cur && bag.length > 1) bag.push(bag.shift()); }
+      if (!bag.length) { bag = items.map((_, i) => i).sort(() => Math.random() - .5); if (bag[0] === cur && bag.length > 1) bag.push(bag.shift()); }
       const n = bag.shift();
-      if (cur >= 0) qs2[cur].classList.remove("on");
-      qs2[n].classList.add("on"); cur = n;
+      if (cur >= 0) items[cur].classList.remove("on");
+      items[n].classList.add("on"); cur = n;
     };
-    next(); setInterval(next, 5500);
-  }
+    next(); setInterval(next, 4000);
+  });
 
   // Reviews rotate
   const qs = $$(".q"), bars = $$(".q-bars i");
