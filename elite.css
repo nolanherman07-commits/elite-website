@@ -395,3 +395,10 @@ em { font-style: italic; color: var(--accent); }
   .nav-cta { display: inline-flex; right: 4%; padding: .75rem 1.15rem; font-size: .72rem; }
   .menu-btn, .mobile-menu { display: none !important; }
 }
+
+
+/* ===== Performance: motion only in the top section of each page ===== */
+.still-bg { position: absolute; inset: 0; background-size: cover; background-position: center 60%; }
+.scene.still .layer, .scene.still .sun, .scene.still .bird, .scene.still svg { animation: none !important; }
+.tools .stars, .booking .stars { animation: none !important; opacity: .8; }
+.panel .photo-bg, .area-photo .photo-bg { animation: none !important; }

@@ -51,7 +51,11 @@ function mountainSVG(name, seed = 7) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
-  $$(".scene").forEach((el, i) => (el.innerHTML = mountainSVG(el.dataset.scene, 11 + i * 17)));
+  $$(".scene").forEach((el, i) => {
+    el.innerHTML = mountainSVG(el.dataset.scene, 11 + i * 17);
+    // Only the top section of each page moves; scenes further down stay still so the site stays smooth
+    if (!el.closest(".hero, .page-hero")) el.classList.add("still");
+  });
 
   // Optional hero video
   $$(".hero-video[data-src]").forEach((v) => {

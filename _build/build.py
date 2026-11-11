@@ -158,7 +158,7 @@ TOOLS = f'''<section class="tools">
 BOOK = CALENDLY or "contact.html#book"
 CTA = f'''<section class="contact">
   <div class="frame small">
-    <div class="scene" data-scene="sunset"></div><video class="hero-video" data-src="videos/beach.mp4" muted loop playsinline autoplay hidden></video><div class="fog f1"></div><div class="shade"></div>
+    <div class="still-bg" style="background-image:url('images/beach-still.jpg')"></div><div class="shade"></div>
     <div class="c-copy">
       <h2>Ready when <em>you</em> are.</h2>
       <p>Call, text, email, or book a time. I respond fast.</p>
