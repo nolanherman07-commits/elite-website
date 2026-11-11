@@ -22,4 +22,4 @@ and the Calendly link (paste it into `CALENDLY` in `_build/build.py`).
 
 ## Action shots
 The About page gallery uses `images/action/closing.jpg`, `showing.jpg`, `clients.jpg`, `open-house.jpg` and `around-town.jpg`.
-Upload your photo with the same file name to replace each placeholder.
+Stock photos show until you upload your own with those names.
