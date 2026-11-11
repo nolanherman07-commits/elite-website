@@ -8,6 +8,14 @@ const LEAD_EMAIL = "nolan@nestlewoodrealty.com";
 // The very first submission sends an "Activate form" email to LEAD_EMAIL; click it once.
 const FORM_ENDPOINT = "https://formsubmit.co/ajax/" + LEAD_EMAIL;
 
+/* Always start each page at the top (unless the link points to a section, like sell.html#value) */
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+const toTop = () => { if (!location.hash) window.scrollTo(0, 0); };
+toTop();
+addEventListener("DOMContentLoaded", toTop);
+addEventListener("load", toTop);
+addEventListener("pageshow", toTop);
+
 /* ===== Animated Blue Ridge mountain scenes (drawn in code) ===== */
 const PALETTES = {
   sunset: { sky: ["#1e2140", "#4e4170", "#b8687b", "#f19a62", "#fcd49a"], sun: "#ffe0a8", sunY: 600, ridges: ["#c18ea0", "#946f94", "#694f7c", "#46385e", "#2a2341", "#141220"] },
@@ -204,6 +212,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Lead forms
   $$(".lead-form").forEach((f) => f.addEventListener("submit", async (e) => {
     e.preventDefault();
+    // Forms marked data-need-contact accept a phone number OR an email
+    if (f.hasAttribute("data-need-contact")) {
+      const ph = f.querySelector('[name="phone"]'), em = f.querySelector('[name="email"]'), note = f.querySelector(".form-note");
+      if (!ph.value.trim() && !em.value.trim()) {
+        if (note) { note.textContent = "Please add a phone number or an email so Nolan can reach you."; note.classList.add("err"); }
+        ph.focus(); return;
+      }
+      if (note) { note.textContent = "Phone or email, whichever you prefer."; note.classList.remove("err"); }
+    }
     const data = new FormData(f), btn = $("button", f);
     const showGuide = () => {
       if (f.dataset.guide && !f.parentElement.querySelector(".guide-dl"))
