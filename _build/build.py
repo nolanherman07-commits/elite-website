@@ -145,6 +145,44 @@ REVIEWS = '''<section class="reviews">
 VALUE_FORM = '''<form class="line-form lead-form" data-subject="Home value request"><input name="address" placeholder="Your home address" required /><button class="pill solid" type="submit">Get my value</button></form>'''
 GUIDE_FORM = '''<form class="line-form lead-form" data-subject="Free buyer's guide request" data-guide="Hickory-Area-Home-Buyers-Guide.pdf"><input name="email" type="email" placeholder="Your email" required /><button class="pill solid" type="submit">Send my guide</button></form>'''
 
+SELLER_GUIDE_FORM = '''<form class="line-form lead-form" data-subject="Free seller's guide request" data-guide="Hickory-Area-Home-Sellers-Guide.pdf"><input name="email" type="email" placeholder="Your email" required /><button class="pill solid" type="submit">Send my guide</button></form>'''
+
+SELL_TOOLS = f'''<section class="tools" id="value">
+  <div class="scene" data-scene="night"></div><div class="stars"></div>
+  <div class="wrap tools-grid">
+    <div class="glass tool reveal"><p class="eyebrow">Free download</p><h3>The Hickory Area <em>Seller's Guide</em></h3>
+      <p>Pricing, prep, marketing, offers and closing, plus a pre-listing checklist. Written in plain English.</p>{SELLER_GUIDE_FORM}</div>
+    <div class="glass tool reveal"><p class="eyebrow">Free home value report</p><h3>What's your home <em>worth?</em></h3>
+      <p>A personalized value report from Nolan, not an algorithm. Usually within 24 hours.</p>{VALUE_FORM}</div>
+  </div>
+</section>'''
+
+QUOTES = [
+  ("He even caught a mistake during closing that ended up giving us more money than we had anticipated.", "John F.", "Bought &amp; sold in Vale"),
+  ("We have bought &amp; sold several houses over the last 30+ years, and Nolan was our best realtor!", "Diane S.", "Home buyer"),
+  ("Relocating from the place where we raised our family was anticipated to be challenging, but Nolan significantly eased the process.", "Pricilla &amp; Jeff L.", "Bought in Granite Falls"),
+  ("We couldn't have asked for a better realtor than Nolan.", "Alfred &amp; Rashonda W.", "First-time buyers in Newton"),
+  ("He looked out for our best interests, getting us a fantastic deal. You feel like you're their only client.", "Lorena &amp; Martin", "Home buyers"),
+  ("Nolan was always proactive, responsive, and genuinely committed to protecting my best interests.", "Jacopo B.", "Home buyer"),
+  ("He responds quickly to messages and questions and was on top of all the paperwork.", "Kalen &amp; Micheal M.", "Home buyers"),
+  ("Nolan did a great job with a seller who wasn't motivated to negotiate.", "Dwayne W.", "Home buyer"),
+  ("When he said he would do something, he did it in a good and timely way.", "Darlene P.", "Home buyer"),
+  ("He went above and beyond with all of the little things that needed taken care of.", "Mindy D.", "Home buyer"),
+  ("I could not have had a better agent. Nolan was there every step of the way.", "David J.", "Home buyer"),
+  ("His professionalism and energy made what could have been a very stressful time easy, efficient, and quick.", "Ashley &amp; Bill", "Home buyers"),
+]
+QUOTE_STRIP = '<section class="quote-strip" aria-label="Client reviews"><div class="wrap qs-inner"><div class="qs-stars">★★★★★ <span>5.0 on Zillow</span></div><div class="qs-stage">' + "".join(
+    f'<blockquote class="qs"><p>“{q}”</p><cite>{n} · {w}</cite></blockquote>' for q, n, w in QUOTES) + '</div></div></section>'
+
+RESUMES = '''<section class="sec resumes"><div class="wrap">
+  <div class="head"><div><p class="eyebrow">Résumé</p><h2>See why clients <em>choose Nolan</em></h2></div></div>
+  <div class="res-grid">
+    <a class="res-card reveal" href="Nolan-Herman-Listing-Resume.pdf" target="_blank" rel="noopener"><img src="images/resume-listing.jpg" alt="Listing résumé cover" />
+      <div><p class="eyebrow">For sellers</p><h3>Listing <em>résumé</em></h3><p>Results, my 15-step listing process, marketing plan and no-risk listing program.</p><span class="pill solid">Open résumé (PDF)</span></div></a>
+    <a class="res-card reveal" href="Nolan-Herman-Buyer-Resume.pdf" target="_blank" rel="noopener"><img src="images/resume-buyer.jpg" alt="Buyer résumé cover" />
+      <div><p class="eyebrow">For buyers</p><h3>Buyer <em>résumé</em></h3><p>Results, how buying works, my no-risk buyers program and client reviews.</p><span class="pill solid">Open résumé (PDF)</span></div></a>
+  </div></div></section>'''
+
 TOOLS = f'''<section class="tools">
   <div class="scene" data-scene="night"></div><div class="stars"></div>
   <div class="wrap tools-grid">
@@ -158,7 +196,7 @@ TOOLS = f'''<section class="tools">
 BOOK = CALENDLY or "contact.html#book"
 CTA = f'''<section class="contact">
   <div class="frame small">
-    <div class="still-bg" style="background-image:url('images/beach-still.jpg')"></div><div class="shade"></div>
+    <div class="still-bg" style="background-image:url('images/hickory-downtown.jpg')"></div><div class="shade"></div>
     <div class="c-copy">
       <h2>Ready when <em>you</em> are.</h2>
       <p>Call, text, email, or book a time. I respond fast.</p>
@@ -215,15 +253,16 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
     </div>
   </div>
 </section>
+{QUOTE_STRIP}
 {panels(list(AREAS))}
-{rail(FEATURED + SOLD, "Homes I'm <em>proud</em> to represent", "Featured &amp; sold", "listings.html")}
-{REVIEWS}
 {TOOLS}
+{REVIEWS}
+{rail(FEATURED + SOLD, "Homes I'm <em>proud</em> to represent", "Featured &amp; sold", "listings.html")}
 {CTA}''', curtain=True)
 
 # ================= ABOUT =================
 page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
-{page_hero("About", "Meet <em>Nolan.</em>", "Licensed REALTOR® with Nestlewood Realty, serving Hickory, Conover, Granite Falls, Huntersville and the Charlotte area.", "golden", video="mountains")}
+{page_hero("About", "Meet <em>Nolan.</em>", "Licensed REALTOR® with Nestlewood Realty, serving Hickory, Conover, Granite Falls, Huntersville and the Charlotte area.", "golden", video="beach")}
 <section class="statement">
   <div class="wrap st-grid">
     <div class="st-photo reveal"><div class="kb"><img src="images/headshot.jpg" alt="Nolan Herman" /></div><span class="tag-glass">Nestlewood Realty</span></div>
@@ -235,13 +274,6 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
     </div>
   </div>
 </section>
-<section class="sec sand"><div class="wrap center"><p class="eyebrow">How I got here</p><h2>From emails to <em>$10M+</em></h2>
-  <div class="timeline" style="text-align:left">
-    <div class="tl reveal"><i>1</i><h3>Growing up</h3><p>Learned the business watching my grandpa invest in real estate.</p></div>
-    <div class="tl reveal"><i>2</i><h3>The emails</h3><p>Out of high school, I emailed brokers asking for a shot.</p></div>
-    <div class="tl reveal"><i>3</i><h3>The internship</h3><p>One broker said yes, and I learned every part of the business.</p></div>
-    <div class="tl reveal"><i>4</i><h3>REALTOR®</h3><p>Two years in: $10M+ sold and 100% of my listings sold.</p></div>
-  </div></div></section>
 <section class="sec"><div class="wrap"><p class="eyebrow">Behind the scenes</p><h2>On the <em>job</em></h2>
   <div class="gallery">
     <div class="reveal"><div class="scene" data-scene="golden"></div><span class="label">Action shot: you at a closing</span></div>
@@ -252,6 +284,13 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
   </div>
   <div class="hero-btns" style="margin-top:2.4rem"><a class="pill solid" href="{ZILLOW}" {EXT}>My Zillow profile</a><a class="pill" style="color:var(--ink);border-color:rgba(0,0,0,.25)" href="{HOMES}" {EXT}>My Homes.com profile</a></div>
 </div></section>
+<section class="sec sand"><div class="wrap center"><p class="eyebrow">How I got here</p><h2>From emails to <em>$10M+</em></h2>
+  <div class="timeline" style="text-align:left">
+    <div class="tl reveal"><i>1</i><h3>Growing up</h3><p>Learned the business watching my grandpa invest in real estate.</p></div>
+    <div class="tl reveal"><i>2</i><h3>The emails</h3><p>Out of high school, I emailed brokers asking for a shot.</p></div>
+    <div class="tl reveal"><i>3</i><h3>The internship</h3><p>One broker said yes, and I learned every part of the business.</p></div>
+    <div class="tl reveal"><i>4</i><h3>REALTOR®</h3><p>Two years in: $10M+ sold and 100% of my listings sold.</p></div>
+  </div></div></section>
 {REVIEWS}
 {CTA}''')
 
@@ -290,7 +329,7 @@ page("buy.html", "Buy a Home | Nolan Herman, REALTOR®", "buy.html", f'''
 
 # ================= SELL =================
 page("sell.html", "Sell Your Home | Nolan Herman, REALTOR®", "sell.html", f'''
-{page_hero("Sell", "Sell your <em>home.</em>", "Smart pricing, professional photos, and social media marketing that puts your home in front of the right buyers.", "dusk", video="lake")}
+{page_hero("Sell", "Sell your <em>home.</em>", "Smart pricing, professional photos, and social media marketing that puts your home in front of the right buyers.", "dusk", video="beach")}
 <section class="statement"><div class="wrap">
   <p class="eyebrow reveal">Results</p>
   <h2 class="words" style="max-width:1000px">Every one of my listings has sold. I launch your home like a product, so buyers compete for <em>it.</em></h2>
@@ -303,18 +342,7 @@ page("sell.html", "Sell Your Home | Nolan Herman, REALTOR®", "sell.html", f'''
     <div class="step reveal"><h3>Market everywhere</h3><p>The MLS, Zillow, Homes.com, plus targeted Instagram and Facebook ads.</p></div>
     <div class="step reveal"><h3>Negotiate &amp; close</h3><p>I screen offers, negotiate hard, and handle every detail to closing.</p></div>
   </div></div></section>
-<section class="sec sand" id="value"><div class="wrap split2">
-  <div class="reveal"><p class="eyebrow">Free home value report</p><h2>What's your home <em>worth?</em></h2>
-    <p class="lead">Tell me a little about your home and I'll send a personalized value report, usually within 24 hours.</p>
-    <ul class="checks"><li>Based on real recent sales near you</li><li>Prepared by me, not a computer</li><li>No pressure and no obligation</li></ul></div>
-  <form class="form reveal lead-form" data-subject="Home value report request">
-    <label>Property address<input name="address" required /></label>
-    <div class="row2"><label>Beds<input name="beds" /></label><label>Baths<input name="baths" /></label></div>
-    <div class="row2"><label>Name<input name="name" required /></label><label>Phone<input name="phone" type="tel" /></label></div>
-    <label>Email<input name="email" type="email" required /></label>
-    <label>Timeline<select name="timeline"><option>Just curious</option><option>Within 3 months</option><option>3–6 months</option><option>6+ months</option></select></label>
-    <button class="pill solid" type="submit">Get my free report</button>
-  </form></div></section>
+{SELL_TOOLS}
 {rail(SOLD, "Recently <em>sold</em>", "Results")}
 {REVIEWS}
 {CTA}''')
@@ -326,7 +354,7 @@ page("listings.html", "Listings | Nolan Herman, REALTOR®", "listings.html", f''
   <div class="grid3">{"".join(card(*l) for l in FEATURED)}</div></div></section>
 <section class="sec"><div class="wrap"><div class="head"><div><p class="eyebrow">Results</p><h2>Recently <em>sold</em></h2></div></div>
   <div class="grid3">{"".join(card(*l, sold=True) for l in SOLD)}</div></div></section>
-{TOOLS}
+{RESUMES}
 {CTA}''')
 
 # Area pages (no separate Areas overview page)

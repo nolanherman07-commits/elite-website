@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $$(".scene").forEach((el, i) => {
     el.innerHTML = mountainSVG(el.dataset.scene, 11 + i * 17);
     // Only the top section of each page moves; scenes further down stay still so the site stays smooth
-    if (!el.closest(".hero, .page-hero")) el.classList.add("still");
+    if (!el.closest(".hero, .page-hero, .tools")) el.classList.add("still");
   });
 
   // Optional hero video
@@ -146,6 +146,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  // One-line reviews: shuffled, never repeats until every line has been shown
+  const qs2 = $$(".quote-strip .qs");
+  if (qs2.length) {
+    let bag = [], cur = -1;
+    const next = () => {
+      if (!bag.length) { bag = qs2.map((_, i) => i).sort(() => Math.random() - .5); if (bag[0] === cur && bag.length > 1) bag.push(bag.shift()); }
+      const n = bag.shift();
+      if (cur >= 0) qs2[cur].classList.remove("on");
+      qs2[n].classList.add("on"); cur = n;
+    };
+    next(); setInterval(next, 5500);
+  }
 
   // Reviews rotate
   const qs = $$(".q"), bars = $$(".q-bars i");
