@@ -17,5 +17,9 @@ Home (`index.html`), About, Buy, Sell, Listings, Areas, Hickory, Newton, Granite
   After editing it, run `python3 _build/build.py` to rebuild every page.
 
 ## Still placeholders
-Listing prices, the Henry Smith St photo, action shots, area photos, market numbers on area pages,
+Listing prices, the Henry Smith St photo, area photos, market numbers on area pages,
 and the Calendly link (paste it into `CALENDLY` in `_build/build.py`).
+
+## Action shots
+The About page gallery uses `images/action/closing.jpg`, `showing.jpg`, `clients.jpg`, `open-house.jpg` and `around-town.jpg`.
+Upload your photo with the same file name to replace each placeholder.
