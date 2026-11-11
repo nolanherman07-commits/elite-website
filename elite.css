@@ -441,3 +441,4 @@ em { font-style: italic; color: var(--accent); }
 .line-form.stack input { border-bottom: 1px solid rgba(255,255,255,.4); }
 .line-form.stack button { align-self: flex-start; margin-top: .8rem; }
 .guide-btn { margin-top: .4rem; }
+.statement h2.home-story { font-size: clamp(1.9rem, 2.9vw, 2.8rem); line-height: 1.16; }

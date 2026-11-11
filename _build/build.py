@@ -51,7 +51,7 @@ AREAS = {
     love=["Uptown dining, sports and nightlife", "Job opportunities across the region", "Neighborhoods from urban to suburban", "Close to Lake Norman and the foothills"]),
 }
 
-NAV = [("about.html", "About"), ("buy.html", "Buy"), ("sell.html", "Sell"), ("listings.html", "Listings")]
+NAV = [("about.html", "About"), ("buy.html", "Buying?"), ("sell.html", "Selling?"), ("listings.html", "Listings")]
 
 def header(active):
     links = "".join(f'<a href="{h}"{" class=\"active\"" if h == active else ""}>{t}</a>' for h, t in NAV)
@@ -245,7 +245,7 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
       <li><b data-count="8" data-prefix="$" data-suffix="M+">$8M+</b>sold in 2026</li>
       <li><b data-count="100" data-suffix="%">100%</b>of listings sold</li>
     </ul>
-    <aside class="glass-card"><small>Meet Nolan</small><p>Real estate runs in my family. Let's find yours.</p>
+    <aside class="glass-card"><small>Meet Nolan</small><p>I carved my own path into real estate. Let's find yours.</p>
       <img src="images/headshot.jpg" alt="Nolan Herman" /><a class="pill solid" href="about.html">My story</a></aside>
     <div class="scroll-cue"><span></span></div>
   </div>
@@ -256,8 +256,9 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
     <div class="st-photo reveal"><div class="kb"><img src="images/headshot.jpg" alt="Nolan Herman" /></div><span class="tag-glass">2 years · $10M+ sold</span></div>
     <div>
       <p class="eyebrow reveal">Meet Nolan</p>
-      <h2 class="words">Real estate runs in my family. I bring the same hustle to every client: fast answers, honest advice, and marketing that gets homes <em>seen.</em></h2>
-      <p class="body reveal"><a class="pill solid" href="about.html">Read my story</a></p>
+      <h2 class="words home-story">After realizing the traditional school path wasn't for me, I decided to carve out my own path in real estate, even though no one in my family had experience in the <em>industry.</em></h2>
+      <p class="body reveal">My passion for real estate comes from my own experience with how stressful moving can be, and I want to make that process easier, smoother, and more enjoyable for others.</p>
+      <p class="body reveal" style="margin-top:-1rem"><a class="pill solid" href="about.html">Read my story</a></p>
       {COUNTERS}
     </div>
   </div>
@@ -277,8 +278,8 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
     <div class="st-photo reveal"><div class="kb"><img src="images/headshot.jpg" alt="Nolan Herman" /></div><span class="tag-glass">Nestlewood Realty</span></div>
     <div>
       <p class="eyebrow reveal">My story</p>
-      <h2 class="words">Real estate runs in my family. My grandpa was an investor. I emailed brokers out of high school until one said <em>yes.</em></h2>
-      <p class="body reveal">Growing up, I had a front-row seat to how property can change a family's future. Right out of high school I started emailing local brokers asking for a chance to learn. Most didn't answer. One did, and that email turned into an internship, and that internship turned into a career. Two years later, I've helped clients buy and sell over $10 million in homes, and every one of my listings has sold.</p>
+      <h2 class="words">Real estate wasn't a family business, and I didn't have a traditional path into the <em>industry.</em></h2>
+      <p class="body reveal">School wasn't for me, and after experiencing firsthand how stressful moving can be, I knew I wanted to build a career where I could make that experience easier for others. I took a chance on myself, reached out for an opportunity, and turned that first yes into a career built on hard work, determination, and helping people find a place to call home.</p>
       {COUNTERS}
     </div>
   </div>
@@ -295,7 +296,7 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
 </div></section>
 <section class="sec sand"><div class="wrap center"><p class="eyebrow">How I got here</p><h2>From emails to <em>$10M+</em></h2>
   <div class="timeline" style="text-align:left">
-    <div class="tl reveal"><i>1</i><h3>Growing up</h3><p>Learned the business watching my grandpa invest in real estate.</p></div>
+    <div class="tl reveal"><i>1</i><h3>Growing up</h3><p>Saw firsthand how stressful moving can be for a family.</p></div>
     <div class="tl reveal"><i>2</i><h3>The emails</h3><p>Out of high school, I emailed brokers asking for a shot.</p></div>
     <div class="tl reveal"><i>3</i><h3>The internship</h3><p>One broker said yes, and I learned every part of the business.</p></div>
     <div class="tl reveal"><i>4</i><h3>REALTOR®</h3><p>Two years in: $10M+ sold and 100% of my listings sold.</p></div>

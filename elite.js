@@ -4,7 +4,9 @@
 // Background videos live in the videos/ folder. Each section picks its clip in _build/build.py.
 // If a video is missing, the animated mountain scene shows instead.
 const LEAD_EMAIL = "nolan@nestlewoodrealty.com";
-const FORM_ENDPOINT = ""; // optional: a formspree.io URL so leads go straight to your inbox
+// Forms are delivered to LEAD_EMAIL by FormSubmit (formsubmit.co, free, no account).
+// The very first submission sends an "Activate form" email to LEAD_EMAIL; click it once.
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/" + LEAD_EMAIL;
 
 /* ===== Animated Blue Ridge mountain scenes (drawn in code) ===== */
 const PALETTES = {
@@ -208,13 +210,20 @@ document.addEventListener("DOMContentLoaded", () => {
         f.insertAdjacentHTML("afterend", `<a class="pill light guide-dl" style="margin-top:1.2rem" href="${f.dataset.guide}" download>Download your guide</a>`);
     };
     if (FORM_ENDPOINT) {
-      btn.textContent = "Sending...";
+      const label = btn.textContent;
+      btn.textContent = "Sending..."; btn.disabled = true;
+      const payload = Object.fromEntries(data);
+      payload._subject = "Website lead: " + (f.dataset.subject || "message");
+      payload._template = "table"; payload._captcha = "false";
+      payload.page = location.href;
       try {
-        data.append("_subject", f.dataset.subject);
-        const r = await fetch(FORM_ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } });
+        const r = await fetch(FORM_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) });
         if (!r.ok) throw new Error();
-        f.reset(); btn.textContent = "Sent!"; showGuide();
-      } catch (err) { btn.textContent = "Try again"; }
+        f.reset(); btn.textContent = "Sent! Nolan will be in touch."; showGuide();
+        setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 6000);
+      } catch (err) {
+        btn.disabled = false; btn.textContent = "Couldn't send. Call or text 828-404-5335";
+      }
       return;
     }
     showGuide();
