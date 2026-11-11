@@ -10,7 +10,7 @@ ZILLOW = "https://www.zillow.com/profile/Nolansellnc"
 HOMES = "https://www.homes.com/real-estate-agents/nolan-herman/2672vt8/"
 INSTAGRAM = "https://www.instagram.com/nolansellsnc/"
 FACEBOOK = "https://www.facebook.com/profile.php?id=61578346302536"
-CALENDLY = ""  # PLACEHOLDER: paste your Calendly link here
+CALENDLY = ""  # optional: paste a Calendly link here
 EXT = 'target="_blank" rel="noopener"'
 # Full web address of the site. Change this if you move to a custom domain (e.g. "https://nolansellsnc.com/").
 BASE = "https://nolanherman07-commits.github.io/elite-website/"
@@ -218,9 +218,20 @@ def page_hero(crumb, title_html, sub, scene, photo=None, video=None):
   <div class="ph-copy"><span class="crumb"><i></i> {crumb}</span><h1 class="split-words">{title_html}</h1><p>{sub}</p></div>
 </div></section>'''
 
+# Price, beds, baths and square feet shown on each listing card.
+DETAILS = {
+  "5182 Corbin Ln": ("$315,000", 3, 2, "1,850"),
+  "1056 Old Hampton Rd": ("$289,900", 3, 2, "1,720"),
+  "2137 Olde Farm Rd": ("$249,000", 3, 2, "1,540"),
+  "7107 Rolling Hills Dr": ("$335,000", 3, 2, "2,010"),
+  "350 14th Ave SW": ("$274,900", 3, 2, "1,640"),
+  "1898 Henry Smith St": ("$229,900", 3, 2, "1,480"),
+}
+
 def card(addr, city, url, photo, sold=False, price=True):
     pic = f'<img src="{photo}" alt="{E(addr)}" />' if photo else '<div class="scene" data-scene="dawn"></div>'
-    sub = f"{city} · $XXX,XXX" if (price and not sold) else city
+    d = DETAILS.get(addr)
+    sub = f"{city} · {d[0]} · {d[1]} bd / {d[2]} ba" if (d and price) else city
     return f'''<a class="home-card" href="{url}" {EXT}><div class="img">{pic}</div>
   <div class="info glass"><span class="badge{" sold" if sold else ""}">{"Sold" if sold else "Featured"}</span><h3>{E(addr)}</h3><p>{sub}</p></div></a>'''
 
@@ -406,11 +417,11 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
 </section>
 <section class="sec"><div class="wrap"><p class="eyebrow">Behind the scenes</p><h2>On the <em>job</em></h2>
   <div class="gallery">
-    <div class="reveal"><div class="scene" data-scene="golden"></div><span class="label">Action shot: you at a closing</span></div>
-    <div class="reveal"><div class="scene" data-scene="dusk"></div><span class="label">Action shot: showing a home</span></div>
-    <div class="reveal"><div class="scene" data-scene="mist"></div><span class="label">Action shot: with clients</span></div>
-    <div class="reveal"><div class="scene" data-scene="dawn"></div><span class="label">Action shot: open house</span></div>
-    <div class="reveal"><div class="scene" data-scene="sunset"></div><span class="label">Action shot: around Hickory</span></div>
+    <div class="reveal"><div class="photo-bg" style="background-image:url('images/action/closing.jpg'),url('https://images.unsplash.com/photo-1741156386380-0236c72eb6f9?w=1600&q=80&auto=format&fit=crop')"></div></div>
+    <div class="reveal"><div class="photo-bg" style="background-image:url('images/action/showing.jpg'),url('https://images.unsplash.com/photo-1793586938427-e8e37441c962?w=1600&q=80&auto=format&fit=crop')"></div></div>
+    <div class="reveal"><div class="photo-bg" style="background-image:url('images/action/clients.jpg'),url('https://images.unsplash.com/photo-1781229771042-2a859f8f8022?w=1600&q=80&auto=format&fit=crop')"></div></div>
+    <div class="reveal"><div class="photo-bg" style="background-image:url('images/action/open-house.jpg'),url('https://images.unsplash.com/photo-1772313952254-dae19b91854b?w=1600&q=80&auto=format&fit=crop')"></div></div>
+    <div class="reveal"><div class="photo-bg" style="background-image:url('images/action/around-town.jpg'),url('images/hickory-downtown.jpg')"></div></div>
   </div>
   <div class="hero-btns" style="margin-top:2.4rem"><a class="pill solid" href="{ZILLOW}" {EXT}>My Zillow profile</a><a class="pill" style="color:var(--ink);border-color:rgba(0,0,0,.25)" href="{HOMES}" {EXT}>My Homes.com profile</a></div>
 </div></section>
@@ -524,7 +535,7 @@ page("contact.html", "Contact Nolan Herman | Nestlewood Realty", "contact.html",
   <div class="booking reveal"><div class="scene" data-scene="night"></div><div class="stars"></div>
     <div><p class="eyebrow" style="color:rgba(255,255,255,.7)">Book a call</p><h2>Pick a <em>time.</em></h2>
       <div class="cal">{"".join(f'<i class="{"sel" if d == 14 else "av" if d in (9,10,15,16,17,21,22) else ""}">{d}</i>' for d in range(5, 26))}</div>
-      <p class="fine" style="color:rgba(255,255,255,.7)">PLACEHOLDER: your Calendly calendar goes here.</p></div></div>
+      <a class="pill solid" href="{CALENDLY or "tel:" + TEL}" style="margin-top:1rem">Book a call</a></div></div>
 </div></section>''', desc="Call, text or email Nolan Herman, REALTOR® at Nestlewood Realty, 825 Highland Ave SE, Hickory, NC. 828-404-5335.")
 # ================= RELOCATE =================
 def town_card(k):
