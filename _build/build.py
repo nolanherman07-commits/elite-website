@@ -1,5 +1,5 @@
 # Builds every page of the Elite site. Run: python3 _build/build.py
-import os, html
+import os, html, json
 os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
 E = html.escape
 
@@ -12,6 +12,9 @@ INSTAGRAM = "https://www.instagram.com/nolansellsnc/"
 FACEBOOK = "https://www.facebook.com/profile.php?id=61578346302536"
 CALENDLY = ""  # PLACEHOLDER: paste your Calendly link here
 EXT = 'target="_blank" rel="noopener"'
+# Full web address of the site. Change this if you move to a custom domain (e.g. "https://nolansellsnc.com/").
+BASE = "https://nolanherman07-commits.github.io/elite-website/"
+SHARE_IMAGE = "images/share.jpg"  # picture shown when a page link is texted or posted
 
 FEATURED = [
   ("5182 Corbin Ln", "Hickory, NC", "https://www.zillow.com/homedetails/5182-Corbin-Ln-Hickory-NC-28601/92556701_zpid/", "images/listings/5182-corbin-ln.jpg"),
@@ -49,9 +52,85 @@ AREAS = {
     intro="Charlotte is the largest city in North Carolina, with a busy uptown, pro football and basketball, great restaurants, and a huge range of neighborhoods. Whether you're relocating for work or want city energy with easy access to Lake Norman and the foothills, I'll help you find the right fit.",
     facts=[("Mecklenburg", "County"), ("~1 hr", "To Hickory"), ("Largest", "City in NC"), ("$XXX,XXX", "Median price*")],
     love=["Uptown dining, sports and nightlife", "Job opportunities across the region", "Neighborhoods from urban to suburban", "Close to Lake Norman and the foothills"]),
+  # ---- Hickory-to-Charlotte corridor towns (no photos yet: animated scene shows instead) ----
+  "newton": dict(name="Newton", scene="golden", county="Catawba County",
+    short="The Catawba County seat, with a historic courthouse square and small-town charm.",
+    intro="Newton is the county seat of Catawba County, just south of Conover and minutes from Hickory. Its historic 1924 courthouse anchors a walkable downtown, and the town is known for Soldiers' Reunion, one of the longest-running community celebrations in the country.",
+    facts=[("Catawba", "County"), ("~10 min", "To Hickory"), ("~55 min", "To Charlotte"), ("NC-16", "Straight to Charlotte")],
+    love=["Historic downtown and courthouse square", "Soldiers' Reunion every August", "Established neighborhoods and good value", "Easy access to US-321, I-40 and NC-16"]),
+  "claremont": dict(name="Claremont", scene="mist", county="Catawba County",
+    short="A small city on I-40 with a quiet, country feel, just east of Conover.",
+    intro="Claremont is a small city along I-40 on the eastern side of Catawba County. You get quiet streets, room to spread out, and a quick hop to Hickory, Conover and Statesville without paying big-city prices.",
+    facts=[("Catawba", "County"), ("~15 min", "To Hickory"), ("I-40", "Right off the highway"), ("~25 min", "To Statesville")],
+    love=["Quiet, small-town pace", "More land for the money", "Quick I-40 access east and west", "Close to Conover and Newton shopping"]),
+  "maiden": dict(name="Maiden", scene="dawn", county="Catawba County",
+    short="A friendly town on US-321 between Newton and Lincolnton.",
+    intro="Maiden is a small town in southern Catawba County on US-321. It has a close-knit community, parks and ballfields, and a central spot that puts you about 20 minutes from Hickory and within reach of Lake Norman and Charlotte.",
+    facts=[("Catawba", "County"), ("~20 min", "To Hickory"), ("US-321", "North-south access"), ("~50 min", "To Charlotte")],
+    love=["Close-knit small-town feel", "Parks, ballfields and community events", "Central to Hickory, Lincolnton and Lake Norman", "Good value on homes and land"]),
+  "lincolnton": dict(name="Lincolnton", scene="sunset", county="Lincoln County",
+    short="The Lincoln County seat, with a classic Main Street and the South Fork River.",
+    intro="Lincolnton is the county seat of Lincoln County, along US-321 between Hickory and Gastonia. It has a revitalized downtown, the South Fork River running through town, and a mix of historic homes, new neighborhoods and country land.",
+    facts=[("Lincoln", "County"), ("~35 min", "To Hickory"), ("~45 min", "To Charlotte"), ("US-321", "North-south access")],
+    love=["Revitalized downtown and local restaurants", "South Fork River and outdoor space", "Mix of historic homes and new construction", "Easy drive to Lake Norman and Gastonia"]),
+  "denver": dict(name="Denver", scene="dusk", county="Lincoln County",
+    short="Lake Norman's western shore, with newer neighborhoods and a quick NC-16 commute.",
+    intro="Denver sits on the western shore of Lake Norman in eastern Lincoln County. It's one of the fastest-growing spots in the region, with waterfront and water-access homes, newer neighborhoods, and NC-16 running straight into Charlotte.",
+    facts=[("Lincoln", "County"), ("~35 min", "To Charlotte"), ("Lake Norman", "West shore"), ("NC-16", "Straight to Charlotte")],
+    love=["Lake Norman boating and waterfront homes", "Newer neighborhoods and amenities", "Direct NC-16 commute into Charlotte", "Quieter side of the lake"]),
+  "sherrills-ford": dict(name="Sherrills Ford", scene="dawn", county="Catawba County",
+    short="Lake Norman living on the Catawba County side of the lake.",
+    intro="Sherrills Ford is a lakeside community in southeastern Catawba County on Lake Norman's northwest shore. It's popular with buyers who want lake life, golf and bigger lots, with Hickory, Mooresville and Charlotte all within reach.",
+    facts=[("Catawba", "County"), ("Lake Norman", "Northwest shore"), ("~30 min", "To Hickory"), ("~45 min", "To Charlotte")],
+    love=["Waterfront and lake-access homes", "Golf and lake communities", "Bigger lots and a quieter pace", "Between Hickory, Mooresville and Charlotte"]),
+  "mooresville": dict(name="Mooresville", scene="sunset", county="Iredell County",
+    short="Race City USA on Lake Norman, with shopping, jobs and an I-77 commute.",
+    intro="Mooresville is the largest town on Lake Norman, in southern Iredell County along I-77. Known as Race City USA for its NASCAR teams, it offers a busy retail corridor, a historic downtown, and everything from lake homes to new-build neighborhoods.",
+    facts=[("Iredell", "County"), ("~30 min", "To Charlotte"), ("Lake Norman", "East shore"), ("I-77", "Commuter corridor")],
+    love=["Lake Norman boating and waterfront living", "Historic downtown and big shopping options", "Racing heritage and local employers", "Quick I-77 drive into Charlotte"]),
+  "statesville": dict(name="Statesville", scene="golden", county="Iredell County",
+    short="Where I-40 meets I-77, with a historic downtown and room to grow.",
+    intro="Statesville is the county seat of Iredell County, right where I-40 and I-77 cross. That location makes it an easy commute to Hickory, Mooresville and Charlotte, and it pairs a historic downtown with more affordable homes and land.",
+    facts=[("Iredell", "County"), ("~35 min", "To Hickory"), ("~45 min", "To Charlotte"), ("I-40 + I-77", "Crossroads")],
+    love=["Historic downtown", "More home and land for the money", "I-40 and I-77 in every direction", "Close to Lake Norman"]),
+  "cornelius": dict(name="Cornelius", scene="dusk", county="Mecklenburg County",
+    short="The heart of Lake Norman, with marinas, waterfront dining and an I-77 commute.",
+    intro="Cornelius sits on the southeast shore of Lake Norman in northern Mecklenburg County. It's known for marinas, lakefront restaurants and waterfront neighborhoods, with I-77 putting uptown Charlotte about 25 minutes away.",
+    facts=[("Mecklenburg", "County"), ("~25 min", "To Charlotte"), ("Lake Norman", "Southeast shore"), ("I-77", "Commuter corridor")],
+    love=["Marinas and waterfront dining", "Lakefront and lake-access neighborhoods", "Quick commute to uptown Charlotte", "Parks and greenways"]),
+  "davidson": dict(name="Davidson", scene="mist", county="Mecklenburg County",
+    short="A walkable college town on Lake Norman, home to Davidson College.",
+    intro="Davidson is a small, walkable town in northern Mecklenburg County, home to Davidson College. Its classic Main Street, greenways and lake access make it one of the most sought-after towns in the Charlotte area.",
+    facts=[("Mecklenburg", "County"), ("~25 min", "To Charlotte"), ("Davidson", "College town"), ("Lake Norman", "Nearby")],
+    love=["Walkable Main Street and village green", "Davidson College events and sports", "Greenways and lake access", "Easy I-77 commute"]),
 }
+# Order of towns from Hickory toward Charlotte (used for "Nearby areas" and the relocation page)
+CORRIDOR = ["granite-falls", "hickory", "conover", "newton", "claremont", "maiden", "statesville", "lincolnton",
+            "sherrills-ford", "denver", "mooresville", "davidson", "cornelius", "huntersville", "charlotte"]
+HOME_AREAS = ["hickory", "conover", "granite-falls", "huntersville", "charlotte"]
+# Drive times from each town (approximate, normal traffic)
+DRIVE = {"granite-falls": ("~15 min", "~1 hr 10 min"), "hickory": ("—", "~1 hr"), "conover": ("~10 min", "~55 min"),
+         "newton": ("~10 min", "~55 min"), "claremont": ("~15 min", "~55 min"), "maiden": ("~20 min", "~50 min"),
+         "statesville": ("~35 min", "~45 min"), "lincolnton": ("~35 min", "~45 min"), "sherrills-ford": ("~30 min", "~45 min"),
+         "denver": ("~40 min", "~35 min"), "mooresville": ("~45 min", "~30 min"), "davidson": ("~50 min", "~25 min"),
+         "cornelius": ("~50 min", "~25 min"), "huntersville": ("~55 min", "~20 min"), "charlotte": ("~1 hr", "—")}
 
-NAV = [("about.html", "About"), ("buy.html", "Buying?"), ("sell.html", "Selling?"), ("listings.html", "Listings")]
+# Monthly market update: edit these each month (source + period shown on the page)
+MARKET_MONTH = "November 2026"
+MARKET = [
+  dict(area="Charlotte metro", period="August 2026", source="Homes.com market report", url="https://www.homes.com/reports/charlotte-housing-market/",
+       stats=[("$425,000", "Median sale price"), ("+1.6%", "vs. last year"), ("69 days", "Median days on market"), ("4.3 mo", "Supply of homes")]),
+  dict(area="Hickory metro", period="Jan to Jun 2026 average", source="Redfin, via WSOC-TV", url="https://www.wsoctv.com/news/hickory-mid-year/M3ZTBUKSAYYEVM7FEOGSNGBS2E/",
+       stats=[("$311,924", "Median sale price"), ("+5.0%", "vs. last year"), ("74 days", "Median days on market"), ("4.6 mo", "Supply of homes")]),
+]
+MARKET_TAKE = [
+  ("For buyers", "Homes are taking longer to sell than they did a couple of years ago, and there's more than four months of supply in both markets. That means more choices and more room to negotiate on price, repairs and closing costs."),
+  ("For sellers", "Prices are still edging up, but buyers are patient. Homes that are priced right from day one and look great online are the ones that sell fastest. Overpricing now usually means sitting on the market and cutting later."),
+  ("Hickory vs. Charlotte", "The typical Hickory-area home costs over $100,000 less than in the Charlotte metro. That gap is why so many buyers are looking up the I-40 and US-321 corridor."),
+]
+
+NAV = [("about.html", "About"), ("buy.html", "Buying?"), ("sell.html", "Selling?"), ("relocate.html", "Relocating?"), ("listings.html", "Listings")]
+TABS = [("about.html", "About"), ("buy.html", "Buy"), ("sell.html", "Sell"), ("relocate.html", "Out of town"), ("listings.html", "Listings")]  # short labels for the phone tab bar
 
 def header(active):
     links = "".join(f'<a href="{h}"{" class=\"active\"" if h == active else ""}>{t}</a>' for h, t in NAV)
@@ -61,27 +140,52 @@ def header(active):
     return f'''<header class="nav-wrap">
   <nav class="nav-pill"><a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Nestlewood Realty" /></a>{links}</nav>
   <a href="contact.html" class="nav-cta">Let's talk</a>
-  <nav class="tabbar" aria-label="Pages">{"".join(f'<a href="{h}"{" class=\"active\"" if (h == active or (h == "index.html" and not active)) else ""}>{t}</a>' for h, t in [("index.html", "Home")] + NAV)}</nav>
+  <nav class="tabbar" aria-label="Pages">{"".join(f'<a href="{h}"{" class=\"active\"" if (h == active or (h == "index.html" and not active)) else ""}>{t}</a>' for h, t in [("index.html", "Home")] + TABS)}</nav>
 </header>'''
 
 FOOTER = f'''<footer class="foot">
   <div class="wrap foot-grid">
     <a href="index.html"><img src="images/logo.png" alt="Nestlewood Realty" /></a>
     <p>Nolan Herman, REALTOR® · Nestlewood Realty<br />{ADDRESS}</p>
-    <div class="soc"><a href="about.html">About</a><a href="buy.html">Buy</a><a href="sell.html">Sell</a><a href="listings.html">Listings</a><a href="contact.html">Contact</a></div>
+    <div class="soc"><a href="about.html">About</a><a href="buy.html">Buy</a><a href="sell.html">Sell</a><a href="relocate.html">Relocate</a><a href="market.html">Market update</a><a href="listings.html">Listings</a><a href="contact.html">Contact</a></div>
     <div class="soc"><a href="{INSTAGRAM}" {EXT}>Instagram</a><a href="{FACEBOOK}" {EXT}>Facebook</a><a href="{ZILLOW}" {EXT}>Zillow</a><a href="{HOMES}" {EXT}>Homes.com</a></div>
   </div>
-  <div class="wrap fine">© 2026 Nestlewood Realty · Equal Housing Opportunity · REALTOR®</div>
+  <div class="wrap foot-areas"><span>Areas I serve</span>{"".join(f'<a href="{k}.html">{AREAS[k]["name"]}</a>' for k in CORRIDOR)}</div>
+  <div class="wrap fine eho-line"><svg class="eho" viewBox="0 0 40 40" role="img" aria-label="Equal Housing Opportunity"><path d="M20 3 2 15v4h4v18h28V19h4v-4z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><rect x="12" y="20" width="16" height="3.4" fill="currentColor"/><rect x="12" y="27" width="16" height="3.4" fill="currentColor"/></svg>
+    <span>© 2026 Nestlewood Realty · Equal Housing Opportunity · REALTOR®</span></div>
 </footer>'''
 
-def page(fname, title, active, body, curtain=False):
+SCHEMA = json.dumps({
+  "@context": "https://schema.org", "@type": "RealEstateAgent",
+  "name": "Nolan Herman, REALTOR®", "url": BASE, "image": BASE + "images/headshot.jpg", "logo": BASE + "images/logo.png",
+  "telephone": TEL, "email": EMAIL,
+  "worksFor": {"@type": "RealEstateOrganization", "name": "Nestlewood Realty"},
+  "address": {"@type": "PostalAddress", "streetAddress": "825 Highland Ave SE", "addressLocality": "Hickory", "addressRegion": "NC", "postalCode": "28602", "addressCountry": "US"},
+  "areaServed": [{"@type": "City", "name": AREAS[k]["name"] + ", NC"} for k in CORRIDOR],
+  "sameAs": [ZILLOW, HOMES, INSTAGRAM, FACEBOOK],
+}, ensure_ascii=False)
+
+DEFAULT_DESC = "Nolan Herman, REALTOR® with Nestlewood Realty. Helping buyers and sellers from Hickory to Charlotte, including Conover, Newton, Lake Norman and Huntersville."
+
+def page(fname, title, active, body, curtain=False, desc=DEFAULT_DESC):
+    url = BASE + ("" if fname == "index.html" else fname)
     doc = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{E(title)}</title>
-<meta name="description" content="Nolan Herman, REALTOR® with Nestlewood Realty. Helping buyers and sellers across Hickory, Conover, Granite Falls, Huntersville and the Charlotte area." />
+<meta name="description" content="{E(desc)}" />
+<link rel="canonical" href="{url}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nolan Herman, REALTOR®" />
+<meta property="og:title" content="{E(title)}" />
+<meta property="og:description" content="{E(desc)}" />
+<meta property="og:url" content="{url}" />
+<meta property="og:image" content="{BASE}{SHARE_IMAGE}" />
+<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json">{SCHEMA}</script>
 <link rel="icon" href="images/tree-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -142,7 +246,7 @@ REVIEWS = '''<section class="reviews">
   </div>
 </section>'''
 
-VALUE_FORM = '''<form class="line-form stack lead-form" data-subject="Home value request"><input name="address" placeholder="Your home address" autocomplete="street-address" required /><input name="phone" type="tel" placeholder="Your phone number" autocomplete="tel" required /><button class="pill solid" type="submit">Get my value</button></form>'''
+VALUE_FORM = '''<form class="line-form stack lead-form" data-subject="Home value request" data-need-contact><input name="address" placeholder="Your home address" autocomplete="street-address" required /><input name="phone" type="tel" placeholder="Phone number" autocomplete="tel" /><input name="email" type="email" placeholder="or email address" autocomplete="email" /><span class="form-note">Phone or email, whichever you prefer.</span><button class="pill solid" type="submit">Get my value</button></form>'''
 GUIDE_FORM = '''<a class="pill solid guide-btn" href="Hickory-Area-Home-Buyers-Guide.pdf" target="_blank" rel="noopener">Open the guide (PDF)</a>'''
 
 SELLER_GUIDE_FORM = '''<a class="pill solid guide-btn" href="Hickory-Area-Home-Sellers-Guide.pdf" target="_blank" rel="noopener">Open the guide (PDF)</a>'''
@@ -178,8 +282,19 @@ QUOTES = [
   ("He made a stressful time easy, efficient, and quick.", "Ashley &amp; Bill", "Home buyers"),
   ("Nolan did a great job with a seller who wasn't motivated to negotiate.", "Dwayne W.", "Home buyer"),
 ]
+# One longer review shown under the moving one-liners. Paste the full Zillow review text here when you have it.
+FULL_REVIEW = dict(
+  text=["Working with Nolan was an outstanding experience from start to finish.",
+        "We couldn't have asked for a better realtor than Nolan. He made us feel supported, informed, and confident.",
+        "He was always quick to answer our questions, incredibly patient.",
+        "We absolutely love our new home."],
+  name="Alfred &amp; Rashonda W.", detail="First-time buyers · Newton, NC · 2026")
+FULL_REVIEW_HTML = f'''<figure class="full-review reveal"><div class="fr-stars">★★★★★</div>
+  <blockquote>{"".join(f"<p>{E(t)}</p>" for t in FULL_REVIEW["text"])}</blockquote>
+  <figcaption><b>{FULL_REVIEW["name"]}</b><span>{FULL_REVIEW["detail"]}</span><a href="{ZILLOW}" {EXT}>Read it on Zillow →</a></figcaption></figure>'''
+
 QUOTE_STRIP = '<section class="quote-strip" aria-label="Client reviews"><div class="wrap qs-inner"><div class="qs-stars">★★★★★ <span>5.0 on Zillow</span></div><div class="qs-stage">' + "".join(
-    f'<blockquote class="qs"><p>“{q}”</p><cite>{n} · {w}</cite></blockquote>' for q, n, w in QUOTES) + '</div></div></section>'
+    f'<blockquote class="qs"><p>“{q}”</p><cite>{n} · {w}</cite></blockquote>' for q, n, w in QUOTES) + '</div>' + FULL_REVIEW_HTML + '</div></section>'
 
 REVIEWS = QUOTE_STRIP  # every page uses the fast one-line strip
 
@@ -265,10 +380,10 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
 </section>
 {QUOTE_STRIP}
 {RESUMES}
-{panels(list(AREAS))}
+{panels(HOME_AREAS)}
 {TOOLS}
 {rail(FEATURED + SOLD, "Homes I'm <em>proud</em> to represent", "Featured &amp; sold", "listings.html")}
-{CTA}''', curtain=True)
+{CTA}''', curtain=True, desc="Nolan Herman, REALTOR® with Nestlewood Realty. Buy, sell or relocate anywhere from Hickory to Charlotte. Free home value report, buyer and seller guides, and featured listings.")
 
 # ================= ABOUT =================
 page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
@@ -302,7 +417,7 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
     <div class="tl reveal"><i>4</i><h3>REALTOR®</h3><p>Two years in: $10M+ sold and 100% of my listings sold.</p></div>
   </div></div></section>
 {REVIEWS}
-{CTA}''')
+{CTA}''', desc="Meet Nolan Herman, REALTOR® with Nestlewood Realty in Hickory, NC. $10M+ in sales and 100% of his listings sold.")
 
 # ================= BUY =================
 page("buy.html", "Buy a Home | Nolan Herman, REALTOR®", "buy.html", f'''
@@ -335,7 +450,7 @@ page("buy.html", "Buy a Home | Nolan Herman, REALTOR®", "buy.html", f'''
   </div>
 </section>
 {rail(FEATURED, "Homes for <em>sale</em>", "Featured listings", "listings.html")}
-{CTA}''')
+{CTA}''', desc="Buying a home in the Hickory or Charlotte area? Get Nolan's step-by-step plan, a free buyer's guide and a mortgage payment calculator.")
 
 # ================= SELL =================
 page("sell.html", "Sell Your Home | Nolan Herman, REALTOR®", "sell.html", f'''
@@ -355,7 +470,7 @@ page("sell.html", "Sell Your Home | Nolan Herman, REALTOR®", "sell.html", f'''
 {SELL_TOOLS}
 {rail(SOLD, "Recently <em>sold</em>", "Results")}
 {REVIEWS}
-{CTA}''')
+{CTA}''', desc="Selling your home in Hickory, Lake Norman or Charlotte? Get a free home value report from Nolan and see his plan to price, market and sell it.")
 
 # ================= LISTINGS =================
 page("listings.html", "Listings | Nolan Herman, REALTOR®", "listings.html", f'''
@@ -364,11 +479,12 @@ page("listings.html", "Listings | Nolan Herman, REALTOR®", "listings.html", f''
   <div class="grid3">{"".join(card(*l) for l in FEATURED)}</div></div></section>
 <section class="sec"><div class="wrap"><div class="head"><div><p class="eyebrow">Results</p><h2>Recently <em>sold</em></h2></div></div>
   <div class="grid3">{"".join(card(*l, sold=True) for l in SOLD)}</div></div></section>
-{CTA}''')
+{CTA}''', desc="Featured homes for sale and recent sales by Nolan Herman, REALTOR® with Nestlewood Realty, across the Catawba Valley and beyond.")
 
 # Area pages (no separate Areas overview page)
 for key, a in AREAS.items():
-    others = [k for k in AREAS if k != key]
+    i = CORRIDOR.index(key)
+    others = [k for k in sorted(CORRIDOR, key=lambda k: abs(CORRIDOR.index(k) - i)) if k != key][:4]
     page(f"{key}.html", f"Living in {a['name']}, NC | Nolan Herman, REALTOR®", "areas.html", f'''
 {page_hero(f"Areas / {a['name']}", f"Living in <em>{a['name']}.</em>", a["short"], a["scene"], a.get("photo"), a.get("video"))}
 <section class="sec"><div class="wrap split2">
@@ -378,10 +494,10 @@ for key, a in AREAS.items():
   <div class="area-photo reveal">{bg(a["scene"], a.get("photo"))}{"" if a.get("photo") else f'<span class="tag-glass">Photo of {a["name"]} goes here</span>'}</div>
 </div>
 <div class="wrap"><div class="facts">{"".join(f'<div class="fact reveal"><b>{E(x)}</b><span>{E(y)}</span></div>' for x, y in a["facts"])}</div>
-  <p class="fine" style="margin-top:1rem">*Market numbers are placeholders. Update with current local data.</p></div></section>
+  {'<p class="fine" style="margin-top:1rem">*Market numbers are placeholders. Update with current local data.</p>' if any("XXX" in x for x, y in a["facts"]) else ""}</div></section>
 {panels(others, "Nearby <em>areas</em>")}
 {TOOLS}
-{CTA}''')
+{CTA}''', desc=f"Thinking about living in {a['name']}, NC? {a['short']} Homes, neighborhoods and local tips from Nolan Herman, REALTOR®.")
 
 # ================= CONTACT =================
 page("contact.html", "Contact Nolan Herman | Nestlewood Realty", "contact.html", f'''
@@ -392,9 +508,9 @@ page("contact.html", "Contact Nolan Herman | Nestlewood Realty", "contact.html",
       <a class="pill solid" href="tel:{TEL}">Call {PHONE}</a><a class="pill" href="sms:{TEL}">Text Nolan</a><a class="pill" href="mailto:{EMAIL}">{EMAIL}</a>
       <a class="pill" href="{MAP}" {EXT}>{ADDRESS}</a>
     </div></div>
-  <form class="form reveal lead-form" data-subject="Website contact form" style="background:#ebe3d8">
+  <form class="form reveal lead-form" data-subject="Website contact form" data-need-contact style="background:#ebe3d8">
     <div class="row2"><label>Name<input name="name" required /></label><label>Phone<input name="phone" type="tel" /></label></div>
-    <label>Email<input name="email" type="email" required /></label>
+    <label>Email<input name="email" type="email" /></label><span class="form-note dark">Phone or email, whichever you prefer.</span>
     <label>I'm interested in<select name="topic"><option>Buying</option><option>Selling</option><option>Home value report</option><option>Something else</option></select></label>
     <label>Message<textarea name="message" rows="4"></textarea></label>
     <button class="pill solid" type="submit">Send message</button>
@@ -404,5 +520,68 @@ page("contact.html", "Contact Nolan Herman | Nestlewood Realty", "contact.html",
     <div><p class="eyebrow" style="color:rgba(255,255,255,.7)">Book a call</p><h2>Pick a <em>time.</em></h2>
       <div class="cal">{"".join(f'<i class="{"sel" if d == 14 else "av" if d in (9,10,15,16,17,21,22) else ""}">{d}</i>' for d in range(5, 26))}</div>
       <p class="fine" style="color:rgba(255,255,255,.7)">PLACEHOLDER: your Calendly calendar goes here.</p></div></div>
-</div></section>''')
+</div></section>''', desc="Call, text or email Nolan Herman, REALTOR® at Nestlewood Realty, 825 Highland Ave SE, Hickory, NC. 828-404-5335.")
+# ================= RELOCATE =================
+def town_card(k):
+    a = AREAS[k]; h, c = DRIVE[k]
+    return f'''<a class="town reveal" href="{k}.html"><div class="t-top"><h3>{a["name"]}</h3><span>{a["county"]}</span></div>
+  <p>{a["short"]}</p><div class="t-drive"><div><b>{h}</b><span>To Hickory</span></div><div><b>{c}</b><span>To Charlotte</span></div></div><i>Explore {a["name"]} →</i></a>'''
+
+page("relocate.html", "Relocating to Hickory, Lake Norman or Charlotte | Nolan Herman, REALTOR®", "relocate.html", f'''
+{page_hero("Relocate", "Moving <em>here?</em>", "From the foothills of Hickory to the Charlotte skyline, I'll help you find the right town and the right home, even from out of state.", "golden", "images/hickory-downtown.jpg")}
+<section class="statement"><div class="wrap">
+  <p class="eyebrow reveal">Why people move here</p>
+  <h2 class="words" style="max-width:1050px">Mountains an hour one way, a major city an hour the other, and lake life in <em>between.</em></h2>
+  <div class="facts" style="margin-top:3rem">
+    <div class="fact reveal"><b>15</b><span>Towns I cover</span></div>
+    <div class="fact reveal"><b>~1 hr</b><span>Hickory to Charlotte</span></div>
+    <div class="fact reveal"><b>~1 hr</b><span>Hickory to the Blue Ridge</span></div>
+    <div class="fact reveal"><b>$100K+</b><span>Less for a Hickory-area home*</span></div>
+  </div>
+  <p class="fine" style="margin-top:1rem">*Hickory metro median of about $312K vs. Charlotte metro median of about $425K. See the <a href="market.html" style="text-decoration:underline">market update</a> for sources.</p>
+</div></section>
+<section class="sec dark"><div class="wrap center"><p class="eyebrow">How I help from out of town</p><h2>Buy here without <em>flying back and forth</em></h2>
+  <div class="steps4" style="text-align:left">
+    <div class="step reveal"><h3>Find your town</h3><p>A call about your job, commute, schools and lifestyle, then a short list of towns that fit.</p></div>
+    <div class="step reveal"><h3>Live video tours</h3><p>I walk homes and neighborhoods with you on FaceTime and point out what photos don't show.</p></div>
+    <div class="step reveal"><h3>Local team</h3><p>Trusted lenders, inspectors and closing attorneys, so every step happens on time.</p></div>
+    <div class="step reveal"><h3>Close from anywhere</h3><p>I coordinate the details so you can sign remotely if you need to and arrive to your keys.</p></div>
+  </div></div></section>
+<section class="sec" id="towns"><div class="wrap"><div class="head"><div><p class="eyebrow">Hickory to Charlotte</p><h2>Find your <em>town</em></h2></div></div>
+  <p class="lead" style="max-width:720px">Listed from the foothills down to the city. Drive times are approximate, in normal traffic.</p>
+  <div class="towns">{"".join(town_card(k) for k in CORRIDOR)}</div></div></section>
+<section class="quote-strip"><div class="wrap qs-inner">
+  <figure class="full-review" style="margin-top:0;border-top:0;padding-top:0"><div class="fr-stars">★★★★★</div>
+    <blockquote><p>Relocating from the place where we raised our family was anticipated to be challenging, but Nolan significantly eased the process.</p></blockquote>
+    <figcaption><b>Pricilla &amp; Jeff L.</b><span>Relocated · Granite Falls, NC · 2026</span><a href="{ZILLOW}" {EXT}>Read it on Zillow →</a></figcaption></figure>
+</div></section>
+<section class="sec sand"><div class="wrap split2 top">
+  <div class="reveal"><p class="eyebrow">Relocation plan</p><h2>Tell me about your <em>move.</em></h2>
+    <p class="lead">I'll send a short list of towns and homes that fit, plus what to expect on price, commute and timing.</p>
+    <ul class="checks"><li>Free relocation consult</li><li>Area tours by video or in person</li><li>Help finding a trusted agent to sell your current home</li></ul></div>
+  <form class="form reveal lead-form" data-subject="Relocation request" data-need-contact style="background:#fff">
+    <div class="row2"><label>Name<input name="name" required /></label><label>Moving from<input name="moving_from" placeholder="City, state" /></label></div>
+    <div class="row2"><label>Phone<input name="phone" type="tel" /></label><label>Email<input name="email" type="email" /></label></div>
+    <span class="form-note dark">Phone or email, whichever you prefer.</span>
+    <label>When are you moving?<select name="timeline"><option>In the next 3 months</option><option>3 to 6 months</option><option>6 to 12 months</option><option>Just exploring</option></select></label>
+    <label>Anything else?<textarea name="message" rows="3" placeholder="Job location, budget, must-haves..."></textarea></label>
+    <button class="pill solid" type="submit">Send my relocation plan</button>
+  </form></div></section>
+{CTA}''', desc="Relocating to Hickory, Lake Norman or Charlotte, NC? Compare 15 towns, drive times and prices, and get a free relocation plan from Nolan Herman, REALTOR®.")
+
+# ================= MARKET UPDATE =================
+def market_block(m):
+    return f'''<div class="mk reveal"><div class="mk-head"><h3>{m["area"]}</h3><span>{m["period"]}</span></div>
+  <div class="facts" style="margin-top:1.2rem">{"".join(f'<div class="fact"><b>{E(x)}</b><span>{E(y)}</span></div>' for x, y in m["stats"])}</div>
+  <p class="fine" style="margin-top:.8rem">Source: <a href="{m["url"]}" {EXT} style="text-decoration:underline">{m["source"]}</a></p></div>'''
+
+page("market.html", f"Hickory & Charlotte Market Update, {MARKET_MONTH} | Nolan Herman, REALTOR®", "market.html", f'''
+{page_hero("Market update", "Market <em>update.</em>", "Home prices, days on market and supply for the Hickory and Charlotte areas, plus what it means if you're buying or selling.", "dusk", "images/charlotte-skyline.jpg")}
+<section class="sec"><div class="wrap"><p class="eyebrow">{MARKET_MONTH}</p><h2>By the <em>numbers</em></h2>
+  {"".join(market_block(m) for m in MARKET)}
+</div></section>
+<section class="sec dark"><div class="wrap center"><p class="eyebrow">What it means</p><h2>Nolan's <em>take</em></h2>
+  <div class="steps4 three" style="text-align:left">{"".join(f'<div class="step reveal"><h3>{E(t)}</h3><p>{E(b)}</p></div>' for t, b in MARKET_TAKE)}</div></div></section>
+{SELL_TOOLS}
+{CTA}''', desc=f"{MARKET_MONTH} housing market update for Hickory and Charlotte, NC: median prices, days on market and supply, with what it means for buyers and sellers.")
 print("built")
