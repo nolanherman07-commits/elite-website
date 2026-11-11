@@ -436,3 +436,8 @@ em { font-style: italic; color: var(--accent); }
 .qs-stage { min-height: 6.5rem; }
 .quote-strip { padding: 3.6rem 0; }
 @media (max-width: 900px) { .qs-stage { min-height: 9rem; } }
+/* home value: address + phone, stacked */
+.line-form.stack { flex-direction: column; align-items: stretch; border-bottom: 0; padding-bottom: 0; gap: .35rem; }
+.line-form.stack input { border-bottom: 1px solid rgba(255,255,255,.4); }
+.line-form.stack button { align-self: flex-start; margin-top: .8rem; }
+.guide-btn { margin-top: .4rem; }

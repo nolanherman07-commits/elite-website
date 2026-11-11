@@ -142,10 +142,10 @@ REVIEWS = '''<section class="reviews">
   </div>
 </section>'''
 
-VALUE_FORM = '''<form class="line-form lead-form" data-subject="Home value request"><input name="address" placeholder="Your home address" required /><button class="pill solid" type="submit">Get my value</button></form>'''
-GUIDE_FORM = '''<form class="line-form lead-form" data-subject="Free buyer's guide request" data-guide="Hickory-Area-Home-Buyers-Guide.pdf"><input name="email" type="email" placeholder="Your email" required /><button class="pill solid" type="submit">Send my guide</button></form>'''
+VALUE_FORM = '''<form class="line-form stack lead-form" data-subject="Home value request"><input name="address" placeholder="Your home address" autocomplete="street-address" required /><input name="phone" type="tel" placeholder="Your phone number" autocomplete="tel" required /><button class="pill solid" type="submit">Get my value</button></form>'''
+GUIDE_FORM = '''<a class="pill solid guide-btn" href="Hickory-Area-Home-Buyers-Guide.pdf" target="_blank" rel="noopener">Open the guide (PDF)</a>'''
 
-SELLER_GUIDE_FORM = '''<form class="line-form lead-form" data-subject="Free seller's guide request" data-guide="Hickory-Area-Home-Sellers-Guide.pdf"><input name="email" type="email" placeholder="Your email" required /><button class="pill solid" type="submit">Send my guide</button></form>'''
+SELLER_GUIDE_FORM = '''<a class="pill solid guide-btn" href="Hickory-Area-Home-Sellers-Guide.pdf" target="_blank" rel="noopener">Open the guide (PDF)</a>'''
 
 SELL_TOOLS = f'''<section class="tools" id="value">
   <div class="scene" data-scene="night"></div><div class="stars"></div>
@@ -363,7 +363,6 @@ page("listings.html", "Listings | Nolan Herman, REALTOR®", "listings.html", f''
   <div class="grid3">{"".join(card(*l) for l in FEATURED)}</div></div></section>
 <section class="sec"><div class="wrap"><div class="head"><div><p class="eyebrow">Results</p><h2>Recently <em>sold</em></h2></div></div>
   <div class="grid3">{"".join(card(*l, sold=True) for l in SOLD)}</div></div></section>
-{RESUMES}
 {CTA}''')
 
 # Area pages (no separate Areas overview page)
