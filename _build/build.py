@@ -212,7 +212,7 @@ MARQUEE = '''<div class="marquee" aria-hidden="true"><div class="track">''' + ("
 
 COUNTERS = '''<div class="counters reveal">
   <div><b data-count="10" data-prefix="$" data-suffix="M+">$10M+</b><span>Total volume</span></div>
-  <div><b data-count="7" data-prefix="$" data-suffix="M+">$7M+</b><span>Sold in 2026</span></div>
+  <div><b data-count="8" data-prefix="$" data-suffix="M+">$8M+</b><span>Sold in 2026</span></div>
   <div><b data-count="100" data-suffix="%">100%</b><span>Listings sold</span></div>
   <div><b data-count="600" data-suffix="+">600+</b><span>Families helped by Nestlewood</span></div>
 </div>'''
@@ -233,7 +233,7 @@ page("index.html", "Nolan Herman, REALTOR® | Nestlewood Realty | Hickory, NC", 
     </div>
     <ul class="hero-stats">
       <li><b data-count="10" data-prefix="$" data-suffix="M+">$10M+</b>total sales volume</li>
-      <li><b data-count="7" data-prefix="$" data-suffix="M+">$7M+</b>sold in 2026</li>
+      <li><b data-count="8" data-prefix="$" data-suffix="M+">$8M+</b>sold in 2026</li>
       <li><b data-count="100" data-suffix="%">100%</b>of listings sold</li>
     </ul>
     <aside class="glass-card"><small>Meet Nolan</small><p>Real estate runs in my family. Let's find yours.</p>
