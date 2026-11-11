@@ -218,7 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
       payload.page = location.href;
       try {
         const r = await fetch(FORM_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) });
-        if (!r.ok) throw new Error();
+        const res = await r.json().catch(() => ({}));
+        // FormSubmit answers HTTP 200 even when it did not deliver (e.g. form not activated yet)
+        if (!r.ok || String(res.success) !== "true") throw new Error(res.message || "not delivered");
         f.reset(); btn.textContent = "Sent! Nolan will be in touch."; showGuide();
         setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 6000);
       } catch (err) {
