@@ -7,6 +7,10 @@ const LEAD_EMAIL = "nolan@nestlewoodrealty.com";
 // Forms are delivered to LEAD_EMAIL by FormSubmit (formsubmit.co, free, no account).
 // The very first submission sends an "Activate form" email to LEAD_EMAIL; click it once.
 const FORM_ENDPOINT = "https://formsubmit.co/ajax/" + LEAD_EMAIL;
+// Per-video tuning: "start" skips that many seconds at the beginning, "rate" is playback speed (1 = normal).
+// When a hero rotates through several clips, each one plays for at most this many seconds.
+const CLIP_MAX_SECONDS = 12;
+const VIDEO_TUNING = {};
 
 /* Always start each page at the top (unless the link points to a section, like sell.html#value) */
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -67,10 +71,32 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!el.closest(".hero, .page-hero, .tools")) el.classList.add("still");
   });
 
-  // Optional hero video
+  // Optional hero video. data-src can list several clips separated by "|"; they play in turn and repeat.
   $$(".hero-video[data-src]").forEach((v) => {
-    v.addEventListener("loadeddata", () => { v.hidden = false; v.classList.add("ready"); v.play().catch(() => {}); }, { once: true });
-    v.src = v.dataset.src;
+    const list = v.dataset.src.split("|").map((s) => s.trim()).filter(Boolean);
+    const multi = list.length > 1;
+    let i = 0, advancing = false;
+    const tune = () => VIDEO_TUNING[list[i]] || {};
+    const next = () => {
+      if (advancing) return;
+      advancing = true;
+      v.classList.remove("ready");
+      setTimeout(() => { i = (i + 1) % list.length; load(); }, 900);
+    };
+    const load = () => { advancing = false; v.loop = !multi && !tune().start; v.src = list[i]; };
+    v.addEventListener("loadedmetadata", () => { if (tune().start) v.currentTime = tune().start; });
+    v.addEventListener("loadeddata", () => {
+      const rate = tune().rate || 1;
+      v.defaultPlaybackRate = rate; v.playbackRate = rate;
+      v.hidden = false; v.classList.add("ready"); v.play().catch(() => {});
+    });
+    v.addEventListener("timeupdate", () => { if (multi && v.currentTime - (tune().start || 0) > CLIP_MAX_SECONDS) next(); });
+    v.addEventListener("ended", () => {
+      if (multi) return next();
+      v.currentTime = tune().start || 0; v.play().catch(() => {});
+    });
+    v.addEventListener("error", () => { if (multi) next(); });
+    load();
   });
 
   // Headlines: words slide up one by one
