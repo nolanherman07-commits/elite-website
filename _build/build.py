@@ -410,7 +410,11 @@ page("about.html", "About Nolan Herman | Nestlewood Realty", "about.html", f'''
     <div>
       <p class="eyebrow reveal">My story</p>
       <h2 class="words">Real estate wasn't a family business, and I didn't have a traditional path into the <em>industry.</em></h2>
-      <p class="body reveal">School wasn't for me, and after experiencing firsthand how stressful moving can be, I knew I wanted to build a career where I could make that experience easier for others. I took a chance on myself, reached out for an opportunity, and turned that first yes into a career built on hard work, determination, and helping people find a place to call home.</p>
+      <p class="body reveal">Growing up, education was everything in my family, especially to my grandparents. The problem was, I hated school, and I wasn't a very good student.</p>
+      <p class="body reveal">So I had the bright idea to drop out of college, get into real estate, and make some real money. My grandparents were not happy, and they let me hear about it. At the time, I thought they just didn't get it.</p>
+      <p class="body reveal">It took me a while to realize they only wanted what was best for me. A couple of my friends dropped out too, and I could tell right away how lucky I was. One ended up stuck in a dead-end job. Another was headed down the wrong path. The difference was that my grandparents never stopped teaching me, even after I walked away from school, and even when I didn't realize I was learning.</p>
+      <p class="body reveal">Only recently did it hit me: they saved my life.</p>
+      <p class="body reveal">That's when I knew that no matter what I did, I wanted to educate people. When I found real estate, I saw an industry where people are making the biggest decision of their lives during one of the most stressful times of their lives, often without anyone taking the time to teach them. That's what I'm here to do, so you can make better decisions.</p>
       {COUNTERS}
     </div>
   </div>
