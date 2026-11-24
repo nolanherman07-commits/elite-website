@@ -17,8 +17,9 @@ EXT = 'target="_blank" rel="noopener"'
 BASE = "https://example.com/"        # PLACEHOLDER
 SHARE_IMAGE = "images/share.jpg"  # picture shown when a page link is texted or posted
 
-# Stats from Jose's Zillow profile (Nov 2026)
-YEARS, TOTAL_SALES, LAST_12, AVG_PRICE, RANGE = 5, 51, 24, "$316K", "$35K–$790K"
+# Career stats from Jose's own bio; Zillow-tracked stats (Nov 2026) for the listings page
+YEARS_TXT, TRANSACTIONS = "3+", "115+"
+Z_SALES, LAST_12, RANGE = 51, 24, "$35K–$790K"
 
 FEATURED = []  # active listings: (address, city, link, photo)
 # Recent sales from Zillow (addresses aren't shown publicly, so cards show price + side)
@@ -226,7 +227,7 @@ QUOTE_STRIP = '<section class="quote-strip" aria-label="Client reviews"><div cla
     f'<blockquote class="qs"><p>“{q}”</p><cite>{n} · {w}</cite></blockquote>' for q, n, w in QUOTES) + '</div>' + FULL_REVIEW_HTML + '</div></section>'
 REVIEWS = QUOTE_STRIP
 
-SPECIALTIES = ["Buyer's agent", "Listing agent", "Relocation", "First-time homebuyers", "Investment properties", "New construction", "Commercial properties"]
+SPECIALTIES = ["Buyer's agent", "Listing agent", "Commercial sales &amp; leasing", "Investment properties &amp; BRRRR", "Custom home building", "New construction", "Relocation", "First-time homebuyers"]
 SPECIALTY_SEC = f'''<section class="sec resumes"><div class="wrap">
   <div class="head"><div><p class="eyebrow">Specialties</p><h2>However you're moving, <em>I've got you</em></h2></div></div>
   <ul class="checks" style="columns:2;max-width:760px">{"".join(f"<li>{s}</li>" for s in SPECIALTIES)}</ul>
@@ -260,9 +261,9 @@ CTA = f'''<section class="contact">
 MARQUEE = '''<div class="marquee" aria-hidden="true"><div class="track">''' + ("<span>Wilmington</span><i>✦</i><span><em>Wrightsville Beach</em></span><i>✦</i><span>Hampstead</span><i>✦</i><span><em>Leland</em></span><i>✦</i><span>Carolina Beach</span><i>✦</i><span>Shallotte</span><i>✦</i><span><em>Cape Fear</em></span><i>✦</i>" * 2) + "</div></div>"
 
 COUNTERS = f'''<div class="counters reveal">
-  <div><b data-count="{TOTAL_SALES}">{TOTAL_SALES}</b><span>Homes sold</span></div>
+  <div><b data-count="115" data-suffix="+">{TRANSACTIONS}</b><span>Transactions</span></div>
+  <div><b data-count="3" data-suffix="+">{YEARS_TXT}</b><span>Years in real estate</span></div>
   <div><b data-count="{LAST_12}">{LAST_12}</b><span>Sales in the last 12 months</span></div>
-  <div><b data-count="{YEARS}">{YEARS}</b><span>Years in real estate</span></div>
   <div><b>5.0★</b><span>Every Zillow review</span></div>
 </div>'''
 
@@ -281,11 +282,11 @@ page("index.html", f"{NAME}, REALTOR® | Wilmington, NC Real Estate", "", f'''
       <div class="hero-btns"><a class="pill light" href="listings.html">See my sales</a><a class="pill" href="sell.html#value">What's my home worth?</a></div>
     </div>
     <ul class="hero-stats">
-      <li><b data-count="{TOTAL_SALES}">{TOTAL_SALES}</b>homes sold</li>
-      <li><b data-count="{LAST_12}">{LAST_12}</b>sales in the last 12 months</li>
+      <li><b data-count="115" data-suffix="+">{TRANSACTIONS}</b>transactions</li>
+      <li><b data-count="3" data-suffix="+">{YEARS_TXT}</b>years in real estate</li>
       <li><b>5.0★</b>on Zillow</li>
     </ul>
-    <aside class="glass-card"><small>Meet {FIRST}</small><p>Five years helping families buy and sell on the Cape Fear coast.</p>
+    <aside class="glass-card"><small>Meet {FIRST}</small><p>Residential, commercial, investment and custom builds, all with one agent.</p>
       <img src="images/headshot.jpg" alt="{NAME}" /><a class="pill solid" href="about.html">About me</a></aside>
     <div class="scroll-cue"><span></span></div>
   </div>
@@ -293,11 +294,11 @@ page("index.html", f"{NAME}, REALTOR® | Wilmington, NC Real Estate", "", f'''
 {MARQUEE}
 <section class="statement">
   <div class="wrap st-grid">
-    <div class="st-photo reveal"><div class="kb"><img src="images/headshot.jpg" alt="{NAME}" /></div><span class="tag-glass">{YEARS} years · {TOTAL_SALES} homes sold</span></div>
+    <div class="st-photo reveal"><div class="kb"><img src="images/headshot.jpg" alt="{NAME}" /></div><span class="tag-glass">{YEARS_TXT} years · {TRANSACTIONS} transactions</span></div>
     <div>
       <p class="eyebrow reveal">Meet {FIRST}</p>
-      <h2 class="words home-story">From first homes in Rocky Point to coastal properties in Brunswick County, I help buyers and sellers move with <em>confidence.</em></h2>
-      <p class="body reveal">I'm quick to respond, I know these neighborhoods, and I work to get my clients the best deal whether they're buying, selling, or both.</p>
+      <h2 class="words home-story">From dream homes for buyers to top-dollar sales for sellers, plus commercial deals and custom builds, I deliver a seamless <em>experience.</em></h2>
+      <p class="body reveal">In just over three years I've completed more than 115 transactions across residential and commercial real estate in the Wilmington area.</p>
       <p class="body reveal" style="margin-top:-1rem"><a class="pill solid" href="about.html">More about me</a></p>
       {COUNTERS}
     </div>
@@ -308,7 +309,7 @@ page("index.html", f"{NAME}, REALTOR® | Wilmington, NC Real Estate", "", f'''
 {panels(HOME_AREAS)}
 {TOOLS}
 {rail(FEATURED + SOLD, "Recent <em>wins</em>", "Recently sold", "listings.html")}
-{CTA}''', curtain=True, desc=f"{NAME}, REALTOR® in Wilmington, NC. {TOTAL_SALES} homes sold and 5.0 stars on Zillow. Buy, sell or relocate anywhere from Hampstead to Shallotte.")
+{CTA}''', curtain=True, desc=f"{NAME}, REALTOR® in Wilmington, NC. {TRANSACTIONS} transactions and 5.0 stars on Zillow. Residential, commercial and investment. Buy, sell or relocate anywhere from Hampstead to Shallotte.")
 
 # ================= ABOUT =================
 page("about.html", f"About {NAME} | Wilmington, NC REALTOR®", "about.html", f'''
@@ -318,10 +319,11 @@ page("about.html", f"About {NAME} | Wilmington, NC REALTOR®", "about.html", f''
     <div class="st-photo reveal"><div class="kb"><img src="images/headshot.jpg" alt="{NAME}" /></div><span class="tag-glass">{BROKERAGE}</span></div>
     <div>
       <p class="eyebrow reveal">About me</p>
-      <h2 class="words">Five years, {TOTAL_SALES} sales, and a 5-star review from every client who's left <em>one.</em></h2>
-      <p class="body reveal">I've spent the last {YEARS} years helping people buy and sell homes across southeastern North Carolina, from Wilmington neighborhoods like Masonboro, Lansdowne and Murraysville to Hampstead, Rocky Point, Supply and Shallotte.</p>
-      <p class="body reveal">My clients range from first-time buyers to sellers of coastal homes near $800,000, and I also work with relocation, investment, new construction and commercial clients.</p>
-      <p class="body reveal">What my clients say most is that I respond fast and work hard to get them the best deal. Whether you're moving across town or across the country, I'll make the process clear from the first call to closing day.</p>
+      <h2 class="words">Residential, commercial, investment and custom builds, all with <em>one agent.</em></h2>
+      <p class="body reveal">Jose Lugo is a distinguished real estate professional with a reputation for delivering exceptional results across both residential and commercial real estate. In just over three years, Jose has completed more than 115 successful transactions, establishing himself as a go-to expert for clients seeking a seamless experience and unparalleled market insight. From securing dream homes for buyers to achieving top-dollar sales for sellers, Jose consistently demonstrates a commitment to excellence that sets him apart among elite agents worldwide.</p>
+      <p class="body reveal">In the commercial real estate arena, Jose's expertise shines in complex sales and lease negotiations, guiding business owners and investors to opportunities that align with their strategic goals. His comprehensive knowledge of market trends, property valuation, and investment strategies ensures his clients receive tailored solutions, whether they're looking to expand, diversify, or optimize their portfolios.</p>
+      <p class="body reveal">A visionary in real estate investment, Jose specializes in property flipping through the BRRRR (Buy, Rehab, Rent, Refinance, Repeat) method, leveraging his experience and insight to maximize returns for clients. This approach, popularized by industry leaders, has allowed him to build a reputation for generating significant gains for investors seeking to grow their portfolios.</p>
+      <p class="body reveal">Beyond residential and commercial transactions, Jose also offers custom home-building services, helping clients bring their dream homes to life on their own lots or through all-inclusive packages. His ability to deliver in such a wide range of services, from luxury residential sales to high-stakes commercial deals and custom builds, cements Jose's position as a trusted advisor for discerning clients who value expertise, innovation, and unmatched commitment to their real estate goals.</p>
       {COUNTERS}
     </div>
   </div>
@@ -344,7 +346,7 @@ page("about.html", f"About {NAME} | Wilmington, NC REALTOR®", "about.html", f''
     <div class="tl reveal"><i>4</i><h3>Close</h3><p>I handle the details all the way to the keys.</p></div>
   </div></div></section>
 {REVIEWS}
-{CTA}''', desc=f"Meet {NAME}, REALTOR® in Wilmington, NC. {YEARS} years in real estate, {TOTAL_SALES} homes sold and 5.0 stars on Zillow.")
+{CTA}''', desc=f"Meet {NAME}, REALTOR® in Wilmington, NC. {TRANSACTIONS} transactions across residential, commercial, investment and custom builds.")
 
 # ================= BUY =================
 page("buy.html", f"Buy a Home in the Wilmington Area | {NAME}, REALTOR®", "buy.html", f'''
@@ -399,7 +401,7 @@ page("listings.html", f"Listings & Recent Sales | {NAME}, REALTOR®", "listings.
 {page_hero("Listings", "Featured <em>homes.</em>", "Homes for sale and recent sales across the Wilmington area and the NC coast.", "golden", video="sell")}
 <section class="sec dark"><div class="wrap"><div class="head"><div><p class="eyebrow">For sale</p><h2>Featured <em>listings</em></h2></div><a class="pill" href="{ZILLOW}" {EXT}>All on Zillow</a></div>
   {featured_html}</div></section>
-<section class="sec"><div class="wrap"><div class="head"><div><p class="eyebrow">Results · {TOTAL_SALES} sales · {RANGE}</p><h2>Recently <em>sold</em></h2></div></div>
+<section class="sec"><div class="wrap"><div class="head"><div><p class="eyebrow">Results · {RANGE}</p><h2>Recently <em>sold</em></h2></div></div>
   <div class="grid3">{"".join(card(*l, sold=True) for l in SOLD)}</div></div></section>
 {CTA}''', desc=f"Homes for sale and recent sales by {NAME}, REALTOR®, across Wilmington, Pender County and the Brunswick County coast.")
 
