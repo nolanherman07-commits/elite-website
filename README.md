@@ -9,7 +9,6 @@ Run `python3 _build/build.py` after editing to rebuild every page.
 ## Still placeholders (need from Jose)
 - Phone, email, brokerage name, office address (`_build/build.py`) and `LEAD_EMAIL` in `elite.js`
 - Logo (`images/logo.png`), favicon (`images/icon.png`)
-- Higher-resolution headshot (current one is from a small screenshot)
 - Active listings (`FEATURED`) and listing photos
 - Domain (`BASE`) and optional Calendly link
 - Local Wilmington photos/drone video (the beach clip is generic)
