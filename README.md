@@ -1,25 +1,15 @@
-# Nolan Herman, REALTOR® | Nestlewood Realty (Elite site)
+# Jose Lugo, REALTOR® (Elite site)
 
-A cinematic multi-page site with animated Blue Ridge mountain scenes, glass menus and cards, and lots of motion.
+Client build of the Elite layout for Jose Lugo, Wilmington, NC. Built from his Zillow profile (Nov 2026).
 
-## Pages
-Home (`index.html`), About, Buy, Sell, Listings, Areas, Hickory, Newton, Granite Falls, Contact.
+## Edit
+All text, stats, towns, sales and contact info live at the top of `_build/build.py`.
+Run `python3 _build/build.py` after editing to rebuild every page.
 
-## Files
-- `*.html`: the pages.
-- `elite.css`: design and animations.
-- `elite.js`: the animated mountain scenes and all the motion. Settings at the top:
-  - `HERO_VIDEO`: put a mountain/drone video in `images/` and add its name here (e.g. `"images/blue-ridge.mp4"`).
-  - `FORM_ENDPOINT`: optional formspree.io link so leads go straight to your inbox.
-- `images/`: logo, headshot, listing photos.
-- `Hickory-Area-Home-Buyers-Guide.pdf`: the free guide.
-- `_build/build.py`: all the site's text, listings, areas and links live at the top of this file.
-  After editing it, run `python3 _build/build.py` to rebuild every page.
-
-## Still placeholders
-Listing prices, the Henry Smith St photo, area photos, market numbers on area pages,
-and the Calendly link (paste it into `CALENDLY` in `_build/build.py`).
-
-## Action shots
-The About page gallery uses `images/action/closing.jpg`, `showing.jpg`, `clients.jpg`, `open-house.jpg` and `around-town.jpg`.
-Stock photos show until you upload your own with those names.
+## Still placeholders (need from Jose)
+- Phone, email, brokerage name, office address (`_build/build.py`) and `LEAD_EMAIL` in `elite.js`
+- Logo (`images/logo.png`), headshot (`images/headshot.jpg`), favicon (`images/icon.png`)
+- Bio / personal story for the About page
+- Active listings (`FEATURED`) and listing photos
+- Domain (`BASE`) and optional Calendly link
+- Local Wilmington photos/drone video (the beach clip is generic)

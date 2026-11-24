@@ -1,9 +1,10 @@
-/* Nestlewood Realty: Elite */
+/* Jose Lugo, REALTOR®: Elite */
 
 /* ===== SETTINGS ===== */
 // Background videos live in the videos/ folder. Each section picks its clip in _build/build.py.
-// If a video is missing, the animated mountain scene shows instead.
-const LEAD_EMAIL = "nolan@nestlewoodrealty.com";
+// If a video is missing, the animated ocean scene shows instead.
+const LEAD_EMAIL = "jose@example.com"; // PLACEHOLDER: Jose's real email
+const AGENT_FIRST = "Jose";
 // Forms are delivered to LEAD_EMAIL by FormSubmit (formsubmit.co, free, no account).
 // The very first submission sends an "Activate form" email to LEAD_EMAIL; click it once.
 const FORM_ENDPOINT = "https://formsubmit.co/ajax/" + LEAD_EMAIL;
@@ -20,7 +21,10 @@ addEventListener("DOMContentLoaded", toTop);
 addEventListener("load", toTop);
 addEventListener("pageshow", toTop);
 
-/* ===== Animated Blue Ridge mountain scenes (drawn in code) ===== */
+/* ===== Animated coastal scenes (drawn in code): rolling ocean swells instead of mountains ===== */
+const SEA = true;
+const SEA_RIDGES = { night: ["#24305e", "#1c2650", "#151d40", "#0f1631", "#0a1024", "#060a18"],
+  default: ["#9fb9c9", "#6f97ad", "#4b7690", "#335a75", "#203f58", "#11263a"] };
 const PALETTES = {
   sunset: { sky: ["#1e2140", "#4e4170", "#b8687b", "#f19a62", "#fcd49a"], sun: "#ffe0a8", sunY: 600, ridges: ["#c18ea0", "#946f94", "#694f7c", "#46385e", "#2a2341", "#141220"] },
   golden: { sky: ["#36597d", "#86a3be", "#e9c495", "#f6a65a"], sun: "#fff0c8", sunY: 560, ridges: ["#b3a9bd", "#8a83a1", "#64627f", "#43445e", "#282a3e", "#14151f"] },
@@ -34,15 +38,15 @@ function mountainSVG(name, seed = 7) {
   const P = PALETTES[name] || PALETTES.sunset, r = rng(seed), W = 1600, n = P.ridges.length, id = name + seed;
   const stops = P.sky.map((c, i) => `<stop offset="${(i / (P.sky.length - 1)) * 100}%" stop-color="${c}"/>`).join("");
   let layers = "";
-  P.ridges.forEach((color, i) => {
-    const base = 470 + i * 78, amp = 60 + i * 12;
+  (SEA ? (SEA_RIDGES[name] || SEA_RIDGES.default) : P.ridges).forEach((color, i) => {
+    const base = SEA ? 600 + i * 52 : 470 + i * 78, amp = SEA ? 5 + i * 6 : 60 + i * 12;
     const waves = [1, 2, 3, 5, 7, 11].map((k) => ({ k, a: (r() * amp) / (k * .55 + .6), p: r() * 6.28 }));
     const y = (x) => base - waves.reduce((s, w) => s + w.a * Math.sin((2 * Math.PI * w.k * x) / W + w.p), 0);
     let d = `M0 900 L0 ${y(0).toFixed(1)}`;
     for (let x = 12; x <= W * 2; x += 12) d += ` L${x} ${y(x).toFixed(1)}`;
     d += ` L${W * 2} 900 Z`;
     let trees = "";
-    if (i >= n - 2) { // pine trees along the closest ridges
+    if (!SEA && i >= n - 2) { // pine trees along the closest ridges
       for (let t = 0; t < 70; t++) {
         const x = r() * W, h = 14 + r() * (i === n - 1 ? 34 : 18), w = h * .38;
         [x, x + W].forEach((xx) => { const yy = y(xx) + 4; trees += `M${(xx - w).toFixed(1)} ${yy.toFixed(1)} L${xx.toFixed(1)} ${(yy - h).toFixed(1)} L${(xx + w).toFixed(1)} ${yy.toFixed(1)} Z `; });
@@ -251,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (f.hasAttribute("data-need-contact")) {
       const ph = f.querySelector('[name="phone"]'), em = f.querySelector('[name="email"]'), note = f.querySelector(".form-note");
       if (!ph.value.trim() && !em.value.trim()) {
-        if (note) { note.textContent = "Please add a phone number or an email so Nolan can reach you."; note.classList.add("err"); }
+        if (note) { note.textContent = `Please add a phone number or an email so ${AGENT_FIRST} can reach you.`; note.classList.add("err"); }
         ph.focus(); return;
       }
       if (note) { note.textContent = "Phone or email, whichever you prefer."; note.classList.remove("err"); }
@@ -273,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await r.json().catch(() => ({}));
         // FormSubmit answers HTTP 200 even when it did not deliver (e.g. form not activated yet)
         if (!r.ok || String(res.success) !== "true") throw new Error(res.message || "not delivered");
-        f.reset(); btn.textContent = "Sent! Nolan will be in touch."; showGuide();
+        f.reset(); btn.textContent = `Sent! ${AGENT_FIRST} will be in touch.`; showGuide();
         setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 6000);
       } catch (err) {
         btn.disabled = false; btn.textContent = "Couldn't send. Call or text 828-404-5335";
